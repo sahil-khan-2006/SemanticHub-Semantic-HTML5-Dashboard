@@ -1,0 +1,2158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Northwind Enterprise Dashboard — Accessible, semantic, WCAG 2.1 AA compliant admin interface. Dashboard, Users, Reports, Settings and Components.">
+<title>Northwind Enterprise — Accessible Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   NORTHWIND ENTERPRISE — DESIGN SYSTEM
+   Minimalist • Neutral • WCAG 2.1 AA • Vanilla CSS
+   ============================================================ */
+:root{
+  --bg:#FAFAF9;
+  --bg-soft:#F5F5F4;
+  --surface:#FFFFFF;
+  --surface-2:#FDFDFC;
+  --border:#E7E5E4;
+  --border-strong:#D6D3D1;
+  --border-focus:#0F172A;
+  --text:#1C1917;
+  --text-strong:#0C0A09;
+  --muted:#57534E;
+  --muted-2:#44403C;
+  --faint:#6B7280;
+  --accent:#1C1917;
+  --accent-hover:#292524;
+  --accent-text:#FFFFFF;
+  --accent-soft:#F5F5F4;
+  --focus:#1D4ED8;
+  --focus-ring:0 0 0 3px #FFFFFF, 0 0 0 6px #1D4ED8;
+  --success:#15803D;
+  --success-bg:#F0FDF4;
+  --success-border:#BBF7D0;
+  --warning:#92400E;
+  --warning-bg:#FFFBEB;
+  --warning-border:#FDE68A;
+  --danger:#B91C1C;
+  --danger-bg:#FEF2F2;
+  --danger-border:#FECACA;
+  --info:#1D4ED8;
+  --info-bg:#EFF6FF;
+  --info-border:#BFDBFE;
+  --radius:12px;
+  --radius-sm:8px;
+  --radius-xs:6px;
+  --shadow-sm:0 1px 2px rgba(28,25,23,.06);
+  --shadow:0 1px 3px rgba(28,25,23,.08), 0 4px 12px rgba(28,25,23,.06);
+  --shadow-lg:0 12px 32px rgba(28,25,23,.14), 0 2px 8px rgba(28,25,23,.08);
+  --header-h:64px;
+  --sidebar-w:264px;
+  --sidebar-collapsed:78px;
+  --maxw:1220px;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+body{
+  margin:0;
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-0.01em;
+}
+h1,h2,h3,h4{line-height:1.25;letter-spacing:-0.025em;color:var(--text-strong);margin:0}
+p{margin:0}
+a{color:var(--text-strong);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--border-strong)}
+a:hover{text-decoration-color:var(--text-strong)}
+img{max-width:100%;display:block}
+button,input,select,textarea{font:inherit;letter-spacing:inherit}
+::selection{background:#1C1917;color:#fff}
+
+/* Utilities */
+.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important}
+.skip-link{
+  position:absolute;top:-60px;left:16px;z-index:200;
+  background:var(--text-strong);color:#fff;padding:10px 18px;border-radius:8px;
+  text-decoration:none;font-weight:600;font-size:14px;transition:top .18s ease;
+}
+.skip-link:focus{top:12px;color:#fff;outline:3px solid var(--focus);outline-offset:2px}
+:focus-visible{outline:3px solid var(--focus)!important;outline-offset:2px;border-radius:6px}
+.kbd{font-family:var(--mono);font-size:11px;background:var(--bg-soft);border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:2px 6px;color:var(--muted)}
+.divider{height:1px;background:var(--border);border:0;margin:0}
+
+/* ============ HEADER ============ */
+.topbar{
+  height:var(--header-h);position:sticky;top:0;z-index:60;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;padding:0 20px;
+}
+.topbar-inner{width:100%;max-width:1440px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--text-strong);color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px;letter-spacing:-0.05em}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-text strong{font-size:15px;letter-spacing:-0.02em;text-decoration:none}
+.brand-text span{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.02em}
+.icon-btn{
+  width:38px;height:38px;border-radius:9px;border:1px solid transparent;background:transparent;
+  display:inline-grid;place-items:center;cursor:pointer;color:var(--muted-2);position:relative;flex-shrink:0;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.icon-btn:hover{background:var(--bg-soft);border-color:var(--border);color:var(--text-strong)}
+.icon-btn svg{width:19px;height:19px}
+.search-form{flex:1;max-width:460px;margin:0 auto;display:flex;align-items:center;position:relative}
+.search-wrap{position:relative;width:100%}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--faint);pointer-events:none}
+.search-input{
+  width:100%;height:40px;border:1px solid var(--border);background:var(--surface);
+  border-radius:10px;padding:0 68px 0 38px;font-size:14px;color:var(--text);
+}
+.search-input::placeholder{color:#8A8580}
+.search-input:focus{border-color:var(--text-strong);outline:none;box-shadow:0 0 0 3px rgba(28,25,23,.12)}
+.search-kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;gap:4px}
+.topbar-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.btn-docs{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:9px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:13.5px;font-weight:600;color:var(--text-strong)}
+.btn-docs:hover{background:var(--bg-soft)}
+.dot-badge{position:absolute;top:8px;right:9px;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--danger);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;border:2px solid #fff}
+.profile-btn{display:flex;align-items:center;gap:10px;border:1px solid var(--border);background:var(--surface);border-radius:99px;padding:4px 12px 4px 4px;cursor:pointer;height:42px}
+.profile-btn:hover{background:var(--bg-soft)}
+.profile-btn img{width:32px;height:32px;border-radius:99px;object-fit:cover}
+.profile-meta{text-align:left;line-height:1.15}
+.profile-meta strong{display:block;font-size:13px}
+.profile-meta span{font-size:12px;color:var(--muted)}
+.mobile-menu-btn{display:none}
+/* Dropdown */
+.dropdown{position:relative}
+.dropdown-panel{
+  position:absolute;right:0;top:calc(100% + 10px);width:340px;background:var(--surface);
+  border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);padding:8px;z-index:70;
+}
+.dropdown-panel[hidden]{display:none}
+.dropdown-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
+.dropdown-head h2{font-size:14px}
+.dropdown-head button{font-size:13px;background:none;border:0;color:var(--info);cursor:pointer;font-weight:600}
+.notif-list{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}
+.notif-list li a{display:flex;gap:12px;padding:12px;border-radius:10px;text-decoration:none}
+.notif-list li a:hover{background:var(--bg-soft)}
+.notif-ava{width:36px;height:36px;border-radius:99px;background:var(--bg-soft);display:grid;place-items:center;font-weight:700;font-size:13px;flex-shrink:0;border:1px solid var(--border)}
+.notif-text p{font-size:13.5px;color:var(--text);text-decoration:none}
+.notif-text time{font-size:12px;color:var(--muted)}
+
+/* ============ SHELL / SIDEBAR ============ */
+.shell{max-width:1440px;margin:0 auto;display:flex;align-items:stretch;min-height:calc(100vh - var(--header-h));position:relative}
+.sidebar{
+  width:var(--sidebar-w);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);
+  padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:var(--header-h);
+  height:calc(100vh - var(--header-h));overflow-y:auto;transition:width .25s ease, transform .25s ease;
+}
+.sidebar-nav{display:flex;flex-direction:column;gap:2px}
+.nav-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);padding:14px 12px 8px;margin:0}
+.nav-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.nav-list a,.nav-list button{
+  display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;
+  text-decoration:none;color:var(--muted-2);font-weight:500;font-size:14.5px;border:1px solid transparent;
+  background:transparent;width:100%;cursor:pointer;text-align:left;
+}
+.nav-list a svg,.nav-list button svg{width:18px;height:18px;flex-shrink:0}
+.nav-list a:hover,.nav-list button:hover{background:var(--bg-soft);color:var(--text-strong)}
+.nav-list a[aria-current="page"]{background:var(--text-strong);color:#fff;font-weight:600}
+.nav-list a[aria-current="page"] svg{color:#fff}
+.nav-count{margin-left:auto;background:var(--bg-soft);border:1px solid var(--border);font-size:11.5px;font-weight:700;border-radius:99px;padding:1px 8px;color:var(--muted-2)}
+.nav-list a[aria-current="page"] .nav-count{background:rgba(255,255,255,.18);border-color:transparent;color:#fff}
+.nav-badge-new{margin-left:auto;font-size:10.5px;font-weight:700;letter-spacing:.05em;background:#1C1917;color:#fff;border-radius:99px;padding:2px 8px}
+.sidebar-tip{margin-top:16px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:16px}
+.sidebar-tip h3{font-size:13.5px;margin-bottom:6px}
+.sidebar-tip p{font-size:13px;color:var(--muted);margin-bottom:12px}
+.sidebar-tip a{font-size:13px;font-weight:600}
+.collapse-row{margin-top:auto;padding-top:16px;border-top:1px solid var(--border)}
+.collapse-btn{width:100%;display:flex;align-items:center;gap:10px;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted-2)}
+.collapse-btn:hover{background:var(--bg-soft);color:var(--text-strong)}
+body.sidebar-collapsed .sidebar{width:var(--sidebar-collapsed)}
+body.sidebar-collapsed .sidebar .nav-label,
+body.sidebar-collapsed .sidebar .nav-text,
+body.sidebar-collapsed .sidebar .nav-count,
+body.sidebar-collapsed .sidebar .nav-badge-new,
+body.sidebar-collapsed .sidebar .sidebar-tip,
+body.sidebar-collapsed .sidebar .collapse-text{display:none}
+body.sidebar-collapsed .sidebar .nav-list a,
+body.sidebar-collapsed .sidebar .nav-list button{justify-content:center;padding:12px}
+body.sidebar-collapsed .collapse-btn{justify-content:center}
+body.sidebar-collapsed .collapse-btn svg{transform:rotate(180deg)}
+.backdrop{position:fixed;inset:var(--header-h) 0 0 0;background:rgba(28,25,23,.4);z-index:50;backdrop-filter:blur(2px)}
+.backdrop[hidden]{display:none}
+
+/* ============ MAIN ============ */
+.main{flex:1;min-width:0;padding:32px 32px 24px;background:var(--bg)}
+.main:focus{outline:none}
+.page{max-width:var(--maxw);margin:0 auto;display:flex;flex-direction:column;gap:24px}
+.page[hidden]{display:none!important}
+.breadcrumb ol{list-style:none;display:flex;align-items:center;gap:8px;margin:0;padding:0;font-size:13px;color:var(--muted)}
+.breadcrumb li{display:flex;align-items:center;gap:8px}
+.breadcrumb a{color:var(--muted);text-decoration:none}
+.breadcrumb a:hover{color:var(--text-strong);text-decoration:underline}
+.breadcrumb li+li::before{content:"/";color:var(--border-strong)}
+.breadcrumb [aria-current="page"]{color:var(--text-strong);font-weight:600}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.page-head h1{font-size:30px;font-weight:700;letter-spacing:-0.03em}
+.page-head h1:focus{outline:none}
+.page-head .lede{color:var(--muted);font-size:15px;margin-top:6px;max-width:600px}
+.page-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;font-weight:600;font-size:14px;padding:0 18px;height:42px;border:1px solid transparent;cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap}
+.btn svg{width:16px;height:16px}
+.btn-primary{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{background:var(--surface);color:var(--text-strong);border-color:var(--border-strong)}
+.btn-secondary:hover{background:var(--bg-soft);border-color:#A8A29E}
+.btn-ghost{background:transparent;color:var(--muted-2);border-color:transparent}
+.btn-ghost:hover{background:var(--bg-soft);color:var(--text-strong)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{background:#991B1B}
+.btn-sm{height:34px;padding:0 14px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px}
+.card-pad-sm{padding:18px}
+.card-title-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.card-title-row h2,.card h2.card-h{font-size:16px;font-weight:650}
+.card-sub{font-size:13.5px;color:var(--muted);margin-top:4px}
+.link-arrow{font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.link-arrow:hover{text-decoration:underline}
+
+/* Stats */
+.stats-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.stat-card::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--bar,#1C1917);opacity:.9}
+.stat-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.stat-icon{width:38px;height:38px;border-radius:10px;background:var(--bg-soft);border:1px solid var(--border);display:grid;place-items:center;color:var(--text-strong)}
+.stat-icon svg{width:18px;height:18px}
+.stat-delta{font-size:12px;font-weight:700;border-radius:99px;padding:3px 9px;display:inline-flex;align-items:center;gap:4px}
+.delta-up{background:var(--success-bg);color:var(--success);border:1px solid var(--success-border)}
+.delta-down{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-border)}
+.stat-value{font-size:30px;font-weight:700;letter-spacing:-0.03em;line-height:1}
+.stat-label{font-size:13px;color:var(--muted);font-weight:500;margin-top:6px}
+.stat-foot{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:12.5px;color:var(--muted)}
+
+/* Grids */
+.grid-2-1{display:grid;grid-template-columns:1.65fr 1fr;gap:16px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* Chart */
+.chart-bars{display:flex;align-items:flex-end;gap:10px;height:220px;padding:16px 4px 0;border-bottom:1px solid var(--border);margin-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+.bar{width:100%;max-width:52px;border-radius:8px 8px 4px 4px;background:#E7E5E4;position:relative;transition:height .8s cubic-bezier(.22,1,.36,1);min-height:8px}
+.bar.active{background:var(--text-strong)}
+.bar:hover{opacity:.85}
+.bar-val{font-size:11.5px;font-weight:700;color:var(--text-strong)}
+.bar-label{font-size:12px;color:var(--muted);font-weight:500}
+.chart-legend{display:flex;gap:16px;margin-top:14px;font-size:13px;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:99px;display:inline-block;margin-right:6px}
+.segmented{display:inline-flex;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px}
+.segmented button{border:0;background:transparent;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.segmented button[aria-pressed="true"]{background:var(--surface);color:var(--text-strong);box-shadow:var(--shadow-sm);border:1px solid var(--border)}
+.donut-wrap{display:flex;align-items:center;gap:20px;margin-top:8px}
+.donut{width:140px;height:140px;flex-shrink:0}
+.donut-legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:13.5px;flex:1}
+.donut-legend li{display:flex;align-items:center;gap:10px}
+.donut-legend strong{margin-left:auto}
+
+/* Activity */
+.activity-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.activity-list li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.activity-list li:last-child{border-bottom:0;padding-bottom:0}
+.activity-list li:first-child{padding-top:0}
+.act-ava{width:36px;height:36px;border-radius:99px;flex-shrink:0;object-fit:cover;border:1px solid var(--border)}
+.act-ava-fallback{width:36px;height:36px;border-radius:99px;background:var(--bg-soft);border:1px solid var(--border);display:grid;place-items:center;font-size:13px;font-weight:700;flex-shrink:0}
+.act-body p{font-size:13.8px}
+.act-body time{font-size:12.5px;color:var(--muted)}
+.act-body strong{font-weight:650}
+
+/* Tables */
+.table-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.table-head h2{font-size:16px}
+.result-count{font-weight:400;color:var(--muted);font-size:14px}
+.table-tools{display:flex;gap:8px;flex-wrap:wrap}
+.table-wrapper{border:1px solid var(--border);border-radius:10px;overflow:auto;background:var(--surface)}
+.table-wrapper:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:760px}
+caption{text-align:left;padding:14px 16px;font-weight:650;font-size:14px;color:var(--text-strong);background:var(--bg-soft);border-bottom:1px solid var(--border);caption-side:top}
+caption span{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:2px}
+thead th{background:var(--surface);text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted-2);font-weight:700;border-bottom:1px solid var(--border);padding:12px 14px;white-space:nowrap}
+thead th .th-sort{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.06em;font-size:11.5px;font-weight:700}
+thead th .th-sort:hover{color:var(--text-strong)}
+tbody td{padding:13px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#FDFCFB}
+.user-cell{display:flex;align-items:center;gap:12px}
+.user-cell img{width:34px;height:34px;border-radius:99px;object-fit:cover;border:1px solid var(--border)}
+.user-cell strong{display:block;font-size:14px;line-height:1.2}
+.user-cell span{font-size:12.5px;color:var(--muted)}
+.mono{font-family:var(--mono);font-size:13px;color:var(--muted-2)}
+.status{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:650;border-radius:99px;padding:4px 11px 4px 9px;border:1px solid}
+.status::before{content:"";width:7px;height:7px;border-radius:99px;background:currentColor}
+.status-active{background:var(--success-bg);color:#166534;border-color:var(--success-border)}
+.status-invited{background:var(--warning-bg);color:#92400E;border-color:var(--warning-border)}
+.status-inactive{background:var(--bg-soft);color:var(--muted-2);border-color:var(--border)}
+.row-actions{display:flex;gap:6px}
+.row-actions .icon-btn{width:32px;height:32px;border:1px solid var(--border);background:var(--surface)}
+.row-actions .icon-btn:hover{background:var(--text-strong);color:#fff;border-color:var(--text-strong)}
+.row-actions .icon-btn.danger:hover{background:var(--danger);border-color:var(--danger)}
+input[type="checkbox"].check{width:17px;height:17px;accent-color:#1C1917;cursor:pointer}
+.table-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.table-foot p{font-size:13px;color:var(--muted)}
+.pagination{list-style:none;display:flex;gap:6px;margin:0;padding:0}
+.pagination button{min-width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-size:13px;font-weight:600;color:var(--muted-2);padding:0 10px}
+.pagination button:hover:not(:disabled){border-color:var(--text-strong);color:var(--text-strong)}
+.pagination button[aria-current="page"]{background:var(--text-strong);color:#fff;border-color:var(--text-strong)}
+.pagination button:disabled{opacity:.45;cursor:not-allowed}
+.empty-state{padding:48px 24px;text-align:center}
+.empty-state h3{font-size:16px;margin-bottom:6px}
+.empty-state p{color:var(--muted);font-size:14px;margin-bottom:16px}
+
+/* Toolbar / Forms */
+.toolbar-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:end}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13.5px;font-weight:600;color:var(--text-strong)}
+.field label .req{color:var(--danger);margin-left:2px}
+.field input[type="text"],.field input[type="email"],.field input[type="tel"],.field input[type="password"],.field input[type="search"],.field input[type="number"],.field select,.field textarea{
+  height:42px;border:1px solid var(--border-strong);border-radius:9px;padding:0 13px;font-size:14px;background:var(--surface);color:var(--text);width:100%;
+}
+.field textarea{height:auto;min-height:110px;padding:11px 13px;resize:vertical;line-height:1.5}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2357534E' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--text-strong);box-shadow:0 0 0 3px rgba(28,25,23,.12)}
+.field input[aria-invalid="true"],.field select[aria-invalid="true"],.field textarea[aria-invalid="true"]{border-color:var(--danger);background:#FFFEFE}
+.field input[aria-invalid="true"]:focus,.field select[aria-invalid="true"]:focus,.field textarea[aria-invalid="true"]:focus{box-shadow:0 0 0 3px rgba(185,28,28,.14)}
+.help{font-size:12.8px;color:var(--muted);margin:0}
+.error-msg{font-size:13px;color:var(--danger);font-weight:550;margin:0;display:flex;gap:6px;align-items:flex-start}
+.error-msg::before{content:"!";width:16px;height:16px;border-radius:99px;background:var(--danger);color:#fff;font-size:11px;font-weight:800;display:inline-grid;place-items:center;flex-shrink:0;margin-top:2px}
+.error-summary{background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:10px;padding:16px 18px;margin-bottom:8px}
+.error-summary h3{font-size:14.5px;color:#7F1D1D;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.error-summary ul{margin:0;padding-left:20px;font-size:13.5px;color:#7F1D1D}
+.error-summary a{color:#7F1D1D;font-weight:600}
+.check-row{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px}
+.check-row input{margin-top:3px;width:18px;height:18px;accent-color:#1C1917;flex-shrink:0;cursor:pointer}
+.check-row label{font-size:13.8px;font-weight:500}
+.pw-wrap{position:relative}
+.pw-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);height:30px;padding:0 10px;font-size:12.5px;font-weight:650;border-radius:7px;border:1px solid var(--border);background:var(--surface);cursor:pointer;color:var(--muted-2)}
+.pw-toggle:hover{color:var(--text-strong);border-color:var(--text-strong)}
+.strength{margin-top:8px}
+.strength-track{height:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:99px;overflow:hidden}
+.strength-fill{height:100%;width:0%;background:#D6D3D1;border-radius:99px;transition:width .3s,background .3s}
+.strength-text{font-size:12.5px;color:var(--muted);margin-top:6px;font-weight:550}
+.char-count{font-size:12.5px;color:var(--muted);text-align:right}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px;padding-top:18px;border-top:1px solid var(--border);flex-wrap:wrap}
+
+/* Switch */
+.switch-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid var(--border)}
+.switch-row:last-child{border-bottom:0}
+.switch-row h3{font-size:14.5px}
+.switch-row p{font-size:13px;color:var(--muted);margin-top:3px;max-width:420px}
+.switch{position:relative;display:inline-flex;flex-shrink:0;cursor:pointer}
+.switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.switch-track{width:46px;height:26px;border-radius:99px;background:#D6D3D1;transition:background .2s;position:relative;border:1px solid #CFCBC8}
+.switch-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:99px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
+.switch input:checked + .switch-track{background:var(--text-strong);border-color:var(--text-strong)}
+.switch input:checked + .switch-track .switch-thumb{left:23px}
+.switch input:focus-visible + .switch-track{outline:3px solid var(--focus);outline-offset:2px}
+
+/* Tabs */
+.tabs{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+.tablist{display:flex;gap:4px;background:var(--bg-soft);padding:8px;border-bottom:1px solid var(--border);overflow-x:auto}
+.tablist [role="tab"]{border:1px solid transparent;background:transparent;padding:9px 16px;border-radius:8px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tablist [role="tab"]:hover{color:var(--text-strong);background:rgba(255,255,255,.7)}
+.tablist [role="tab"][aria-selected="true"]{background:var(--surface);color:var(--text-strong);border-color:var(--border);box-shadow:var(--shadow-sm)}
+.tabpanel{padding:24px}
+.tabpanel[hidden]{display:none}
+
+/* Accordion */
+.accordion{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+.accordion-item+.accordion-item{border-top:1px solid var(--border)}
+.accordion-btn{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;background:var(--surface);border:0;cursor:pointer;font-size:14.5px;font-weight:650;color:var(--text-strong);text-align:left}
+.accordion-btn:hover{background:var(--bg-soft)}
+.accordion-btn svg{width:17px;height:17px;transition:transform .2s;flex-shrink:0;color:var(--muted)}
+.accordion-btn[aria-expanded="true"] svg{transform:rotate(180deg)}
+.accordion-panel{padding:0 18px 18px;font-size:14px;color:var(--muted-2)}
+.accordion-panel[hidden]{display:none}
+
+/* Alerts */
+.alert{display:flex;gap:12px;padding:14px 16px;border-radius:10px;border:1px solid;font-size:13.8px;align-items:flex-start}
+.alert svg{width:18px;height:18px;flex-shrink:0;margin-top:1px}
+.alert strong{font-weight:700}
+.alert-success{background:var(--success-bg);border-color:var(--success-border);color:#14532D}
+.alert-info{background:var(--info-bg);border-color:var(--info-border);color:#1E3A8A}
+.alert-warning{background:var(--warning-bg);border-color:var(--warning-border);color:#78350F}
+.alert-error{background:var(--danger-bg);border-color:var(--danger-border);color:#7F1D1D}
+.alert button{margin-left:auto;background:none;border:0;cursor:pointer;color:inherit;font-weight:700;padding:2px 6px;border-radius:6px}
+
+/* Tooltip */
+.tooltip-wrap{position:relative;display:inline-block}
+.tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--text-strong);color:#fff;font-size:12.5px;font-weight:500;padding:7px 11px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.tooltip::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--text-strong)}
+.tooltip-wrap:hover .tooltip,.tooltip-wrap:focus-within .tooltip{opacity:1}
+
+/* Progress */
+.progress{height:8px;background:var(--bg-soft);border:1px solid var(--border);border-radius:99px;overflow:hidden}
+.progress-bar{height:100%;background:var(--text-strong);border-radius:99px;transition:width .6s ease}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:99px;padding:4px 11px;border:1px solid var(--border);background:var(--bg-soft);color:var(--muted-2)}
+.badge-dark{background:var(--text-strong);color:#fff;border-color:var(--text-strong)}
+.badge-outline{background:transparent}
+
+/* Demo cards */
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.demo-card h3{font-size:15px;margin-bottom:6px}
+.demo-card>p{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+.demo-stage{background:var(--bg);border:1px dashed var(--border-strong);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.code{font-family:var(--mono);font-size:12.5px;background:var(--text-strong);color:#E7E5E4;border-radius:10px;padding:14px 16px;overflow-x:auto;margin:0}
+
+/* Settings layout */
+.settings-layout{display:grid;grid-template-columns:230px 1fr;gap:16px;align-items:start}
+.settings-side{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;position:sticky;top:calc(var(--header-h) + 24px)}
+.settings-side ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.settings-side button{width:100%;display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-size:14px;font-weight:550;color:var(--muted-2);cursor:pointer;text-align:left}
+.settings-side button svg{width:17px;height:17px}
+.settings-side button[aria-selected="true"]{background:var(--text-strong);color:#fff;font-weight:650}
+.settings-side button:not([aria-selected="true"]):hover{background:var(--bg-soft);color:var(--text-strong)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(28,25,23,.48);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .2s}
+.modal-overlay[hidden]{display:none!important}
+.modal-overlay.show{opacity:1}
+.modal{background:var(--surface);border-radius:16px;box-shadow:var(--shadow-lg);width:100%;max-width:600px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;transform:translateY(12px) scale(.98);transition:transform .22s ease}
+.modal-overlay.show .modal{transform:translateY(0) scale(1)}
+.modal-lg{max-width:860px}
+.modal-sm{max-width:440px}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:24px 26px 0}
+.modal-head h2{font-size:19px}
+.modal-head p{font-size:13.5px;color:var(--muted);margin-top:4px}
+.modal-close{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:grid;place-items:center;flex-shrink:0;color:var(--muted-2)}
+.modal-close:hover{background:var(--text-strong);color:#fff;border-color:var(--text-strong)}
+.modal-body{padding:20px 26px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;padding:18px 26px;border-top:1px solid var(--border);background:var(--bg-soft)}
+.dl{display:grid;grid-template-columns:140px 1fr;gap:10px 16px;font-size:14px;margin:0}
+.dl dt{color:var(--muted);font-weight:500}
+.dl dd{margin:0;font-weight:550}
+
+/* Docs modal content */
+.docs-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.docs-tabs button{border:1px solid var(--border);background:var(--surface);padding:8px 14px;border-radius:99px;font-size:13px;font-weight:600;color:var(--muted-2);cursor:pointer}
+.docs-tabs button[aria-selected="true"]{background:var(--text-strong);color:#fff;border-color:var(--text-strong)}
+.docs-panel{font-size:14px;color:var(--muted-2)}
+.docs-panel h3{font-size:15px;margin:18px 0 8px}
+.docs-panel h3:first-child{margin-top:0}
+.docs-panel ul,.docs-panel ol{padding-left:20px;margin:8px 0}
+.docs-panel li{margin-bottom:6px}
+.folder-tree{font-family:var(--mono);font-size:12.8px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px 18px;white-space:pre;overflow-x:auto;color:var(--text-strong);line-height:1.7;margin:10px 0}
+.check-list{list-style:none!important;padding:0!important}
+.check-list li{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:10px 12px}
+.check-list li span.tick{width:20px;height:20px;border-radius:99px;background:var(--success);color:#fff;font-size:12px;font-weight:800;display:inline-grid;place-items:center;flex-shrink:0}
+.kbd-table{width:100%;min-width:0;font-size:13px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.kbd-table th{background:var(--bg-soft);padding:10px 12px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.kbd-table td{padding:10px 12px;border-top:1px solid var(--border)}
+
+/* Toast */
+.toast-region{position:fixed;bottom:24px;right:24px;z-index:120;display:flex;flex-direction:column;gap:10px;max-width:min(380px,calc(100vw - 32px))}
+.toast{background:var(--text-strong);color:#fff;border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow-lg);animation:slideIn .3s ease;font-size:14px}
+.toast.success{border-left:4px solid #22C55E}
+.toast.error{border-left:4px solid #EF4444}
+.toast.info{border-left:4px solid #60A5FA}
+.toast strong{display:block;font-size:14px}
+.toast p{font-size:13px;opacity:.85}
+.toast button{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:7px;padding:4px 9px;cursor:pointer;font-size:12px;font-weight:700;margin-left:auto;flex-shrink:0}
+@keyframes slideIn{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* Footer */
+.footer{background:var(--surface);border-top:1px solid var(--border);margin-top:8px}
+.footer-inner{max-width:1440px;margin:0 auto;padding:36px 32px 0}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding-bottom:28px}
+.footer-brand p{font-size:13.5px;color:var(--muted);margin-top:10px;max-width:300px}
+.footer h2{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);margin-bottom:12px}
+.footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.footer ul a,.footer ul button{text-decoration:none;color:var(--muted-2);background:none;border:0;padding:0;cursor:pointer;font-size:14px;text-align:left}
+.footer ul a:hover,.footer ul button:hover{color:var(--text-strong);text-decoration:underline}
+.wcag-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--success-border);background:var(--success-bg);color:#166534;font-size:12.5px;font-weight:700;border-radius:99px;padding:6px 13px;margin-top:14px}
+.footer-bottom{border-top:1px solid var(--border);padding:18px 0;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.footer-bottom nav ul{flex-direction:row;gap:18px}
+
+/* Details */
+details.data-details{border:1px solid var(--border);border-radius:10px;background:var(--surface);margin-top:14px}
+details.data-details summary{padding:13px 16px;cursor:pointer;font-weight:650;font-size:14px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.data-details summary::-webkit-details-marker{display:none}
+details.data-details summary:hover{background:var(--bg-soft)}
+details.data-details .details-body{padding:0 16px 16px}
+
+/* Report mini stats */
+.mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mini-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.mini-stat span{font-size:12.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.mini-stat strong{display:block;font-size:22px;margin-top:4px;letter-spacing:-0.02em}
+.mini-stat small{font-size:12.5px;color:var(--muted)}
+
+/* Responsive */
+@media (max-width:1100px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .grid-2-1,.grid-2,.demo-grid,.footer-grid{grid-template-columns:1fr 1fr}
+  .grid-2-1{grid-template-columns:1fr}
+  .mini-stats{grid-template-columns:1fr 1fr}
+  .toolbar-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:920px){
+  .sidebar{position:fixed;left:0;top:var(--header-h);z-index:55;transform:translateX(-100%);width:280px!important;box-shadow:var(--shadow-lg)}
+  .sidebar.open{transform:translateX(0)}
+  body.sidebar-collapsed .sidebar .nav-label,
+  body.sidebar-collapsed .sidebar .nav-text,
+  body.sidebar-collapsed .sidebar .nav-count,
+  body.sidebar-collapsed .sidebar .sidebar-tip{display:block}
+  body.sidebar-collapsed .sidebar .nav-list a{justify-content:flex-start}
+  .mobile-menu-btn{display:inline-grid}
+  .collapse-row{display:none}
+  .search-form{display:none}
+  .search-form.mobile-visible{display:flex;position:absolute;top:var(--header-h);left:0;right:0;max-width:none;background:var(--surface);padding:12px 16px;border-bottom:1px solid var(--border)}
+  .profile-meta{display:none}
+  .main{padding:22px 18px}
+  .settings-layout{grid-template-columns:1fr}
+  .settings-side{position:static}
+  .settings-side ul{flex-direction:row;overflow-x:auto}
+  .settings-side button{white-space:nowrap}
+}
+@media (max-width:640px){
+  .stats-grid,.mini-stats,.grid-2,.demo-grid,.footer-grid{grid-template-columns:1fr}
+  .page-head h1{font-size:24px}
+  .form-grid-2,.toolbar-grid{grid-template-columns:1fr}
+  .card{padding:18px}
+  .topbar{padding:0 12px}
+  .btn-docs span{display:none}
+  .modal{margin:0}
+  .modal-head,.modal-body{padding-left:18px;padding-right:18px}
+  .toast-region{left:16px;right:16px;bottom:16px}
+  .footer-inner{padding:28px 18px 0}
+  .dl{grid-template-columns:1fr;gap:2px}
+  .dl dt{margin-top:10px}
+}
+@media print{
+  .sidebar,.topbar-actions,.page-actions,.table-tools,.footer,.toast-region{display:none!important}
+  .main{padding:0}
+  .card{box-shadow:none;break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- Skip links for keyboard users -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<a class="skip-link" href="#primary-nav">Skip to primary navigation</a>
+
+<!-- Polite live region for announcements -->
+<div id="announcer" class="visually-hidden" role="status" aria-live="polite"></div>
+
+<!-- ================= HEADER ================= -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <!-- Mobile menu toggle -->
+    <button type="button" class="icon-btn mobile-menu-btn" id="mobileMenuBtn" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+
+    <!-- Brand -->
+    <a class="brand" href="#dashboard" data-page-link="dashboard" aria-label="Northwind Enterprise — Go to Dashboard home">
+      <span class="brand-mark" aria-hidden="true">N</span>
+      <span class="brand-text"><strong>Northwind</strong><span>ENTERPRISE</span></span>
+    </a>
+
+    <!-- Site search -->
+    <form class="search-form" id="siteSearchForm" role="search" aria-label="Site search">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <label class="visually-hidden" for="siteSearch">Search dashboard, users and reports</label>
+        <input class="search-input" type="search" id="siteSearch" name="q" placeholder="Search users, reports, settings…" autocomplete="off" aria-describedby="searchHint">
+        <span class="visually-hidden" id="searchHint">Press Enter to search users. Press slash to focus search from anywhere.</span>
+        <span class="search-kbd" aria-hidden="true"><span class="kbd">/</span></span>
+      </div>
+    </form>
+
+    <!-- Header actions -->
+    <div class="topbar-actions">
+      <button type="button" class="btn-docs" data-open-modal="docsModal" aria-label="Open project documentation and README">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+        <span>Docs</span>
+      </button>
+
+      <!-- Notifications -->
+      <div class="dropdown">
+        <button type="button" class="icon-btn" id="notifBtn" aria-haspopup="true" aria-expanded="false" aria-controls="notifPanel" aria-label="Notifications, 3 unread">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="dot-badge" aria-hidden="true">3</span>
+        </button>
+        <div class="dropdown-panel" id="notifPanel" role="region" aria-label="Notifications" hidden>
+          <div class="dropdown-head">
+            <h2>Notifications</h2>
+            <button type="button" id="markReadBtn">Mark all read</button>
+          </div>
+          <ul class="notif-list">
+            <li><a href="#users" data-page-link="users"><span class="notif-ava" aria-hidden="true">SK</span><span class="notif-text"><p><strong>Sarah Kim</strong> joined the Engineering team</p><time datetime="2026-09-11T09:20">2 hours ago</time></span></a></li>
+            <li><a href="#reports" data-page-link="reports"><span class="notif-ava" aria-hidden="true">Q3</span><span class="notif-text"><p><strong>Q3 Report</strong> is ready for review</p><time datetime="2026-09-10T16:00">Yesterday</time></span></a></li>
+            <li><a href="#settings" data-page-link="settings"><span class="notif-ava" aria-hidden="true">🔒</span><span class="notif-text"><p><strong>Security:</strong> 2FA enabled successfully</p><time datetime="2026-09-09T11:30">2 days ago</time></span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <button type="button" class="profile-btn" data-page-goto="settings" aria-label="Open settings for Amara Chen, Administrator">
+        <img src="https://i.pravatar.cc/64?img=47" alt="Profile photo of Amara Chen" width="32" height="32">
+        <span class="profile-meta"><strong>Amara Chen</strong><span>Administrator</span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar" aria-label="Sidebar">
+    <nav id="primary-nav" aria-label="Primary">
+      <h2 class="visually-hidden">Primary navigation</h2>
+      <p class="nav-label" id="navMainLabel">Workspace</p>
+      <ul class="nav-list" aria-labelledby="navMainLabel">
+        <li><a href="#dashboard" data-page-link="dashboard" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span class="nav-text">Dashboard</span></a></li>
+        <li><a href="#users" data-page-link="users">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="nav-text">Users</span><span class="nav-count" id="navUserCount">12</span></a></li>
+        <li><a href="#reports" data-page-link="reports">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v-4M12 17V7M17 13v-2"/></svg>
+          <span class="nav-text">Reports</span></a></li>
+        <li><a href="#settings" data-page-link="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+          <span class="nav-text">Settings</span></a></li>
+        <li><a href="#components" data-page-link="components">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m12 2 9 4.9-9 4.9-9-4.9L12 2Z"/><path d="m3 11.9 9 4.9 9-4.9"/><path d="m3 16.9 9 4.9 9-4.9"/></svg>
+          <span class="nav-text">Components</span><span class="nav-badge-new">A11Y</span></a></li>
+      </ul>
+
+      <p class="nav-label" id="navResLabel">Resources</p>
+      <ul class="nav-list" aria-labelledby="navResLabel">
+        <li><button type="button" data-open-modal="docsModal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+          <span class="nav-text">Documentation</span></button></li>
+        <li><button type="button" id="shortcutsBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg>
+          <span class="nav-text">Shortcuts</span></button></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-tip">
+      <h3>WCAG 2.1 AA Ready</h3>
+      <p>This workspace passes contrast, focus and keyboard checks out of the box.</p>
+      <a href="#components" data-page-link="components">View a11y demos →</a>
+    </div>
+
+    <div class="collapse-row">
+      <button type="button" class="collapse-btn" id="collapseBtn" aria-expanded="true" aria-controls="sidebar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span class="collapse-text">Collapse sidebar</span>
+      </button>
+    </div>
+  </aside>
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <!-- ================= MAIN ================= -->
+  <main id="main-content" class="main" tabindex="-1" aria-label="Main content">
+
+    <!-- ======== PAGE: DASHBOARD ======== -->
+    <div class="page" data-page-panel="dashboard" id="page-dashboard">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol><li><a href="#dashboard" data-page-link="dashboard">Home</a></li><li aria-current="page">Dashboard</li></ol>
+      </nav>
+
+      <div class="page-head">
+        <div>
+          <h1 id="dashboard-title" tabindex="-1">Dashboard</h1>
+          <p class="lede">Welcome back, Amara. Here is a calm overview of your organisation today — <time datetime="2026-09-11">Friday, September 11, 2026</time>.</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-secondary" id="downloadReportBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+            Export summary</button>
+          <button type="button" class="btn btn-primary" data-open-modal="userModal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Add User</button>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <section aria-labelledby="stats-heading">
+        <h2 id="stats-heading" class="visually-hidden">Key performance statistics</h2>
+        <ul class="stats-grid">
+          <li><article class="stat-card" style="--bar:#1C1917" aria-labelledby="stat1-label">
+            <div class="stat-top"><span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="stat-delta delta-up">▲ 12.4%</span></div>
+            <p class="stat-value" data-count="2481">0</p>
+            <p class="stat-label" id="stat1-label">Total employees</p>
+            <p class="stat-foot">Across 7 departments</p>
+          </article></li>
+          <li><article class="stat-card" style="--bar:#57534E" aria-labelledby="stat2-label">
+            <div class="stat-top"><span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 15v-4M12 17V7M17 13v-2"/></svg></span><span class="stat-delta delta-up">▲ 8.1%</span></div>
+            <p class="stat-value" data-count="184" data-prefix="$" data-suffix="k">0</p>
+            <p class="stat-label" id="stat2-label">Revenue this month</p>
+            <p class="stat-foot">Forecast $196k by month-end</p>
+          </article></li>
+          <li><article class="stat-card" style="--bar:#A8A29E" aria-labelledby="stat3-label">
+            <div class="stat-top"><span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="stat-delta delta-down">▼ 2.3%</span></div>
+            <p class="stat-value" data-count="96" data-suffix="%">0</p>
+            <p class="stat-label" id="stat3-label">Project completion</p>
+            <p class="stat-foot">18 of 21 milestones done</p>
+          </article></li>
+          <li><article class="stat-card" style="--bar:#1D4ED8" aria-labelledby="stat4-label">
+            <div class="stat-top"><span class="stat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="stat-delta delta-up">▲ 4.6%</span></div>
+            <p class="stat-value" data-count="98" data-suffix="%">0</p>
+            <p class="stat-label" id="stat4-label">Accessibility score</p>
+            <p class="stat-foot">WCAG 2.1 AA · 0 violations</p>
+          </article></li>
+        </ul>
+      </section>
+
+      <div class="grid-2-1">
+        <!-- Performance chart -->
+        <section class="card" aria-labelledby="perf-heading">
+          <div class="card-title-row">
+            <div><h2 id="perf-heading">Team performance</h2><p class="card-sub">Tasks completed per month · 2026</p></div>
+            <div class="segmented" role="group" aria-label="Select performance period">
+              <button type="button" data-period="H1" aria-pressed="true">H1</button>
+              <button type="button" data-period="H2" aria-pressed="false">H2</button>
+            </div>
+          </div>
+          <div id="perfChart" class="chart-bars" role="img" aria-label="Bar chart showing tasks completed per month. Highest month is June with 86 tasks."></div>
+          <div class="chart-legend" aria-hidden="true">
+            <span><span class="legend-dot" style="background:#1C1917"></span>Completed</span>
+            <span><span class="legend-dot" style="background:#E7E5E4"></span>Planned baseline</span>
+          </div>
+          <details class="data-details">
+            <summary>View data as table <span aria-hidden="true">▾</span></summary>
+            <div class="details-body">
+              <div class="table-wrapper" role="region" aria-label="Performance data table" tabindex="0">
+                <table style="min-width:420px">
+                  <caption class="visually-hidden">Tasks completed per month</caption>
+                  <thead><tr><th scope="col">Month</th><th scope="col">Completed</th><th scope="col">Target</th></tr></thead>
+                  <tbody id="perfTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <!-- Recent activity -->
+        <section class="card" aria-labelledby="activity-heading">
+          <div class="card-title-row">
+            <div><h2 id="activity-heading">Recent activity</h2><p class="card-sub">Latest updates across teams</p></div>
+          </div>
+          <ol class="activity-list">
+            <li><img class="act-ava" src="https://i.pravatar.cc/72?img=32" alt="Profile photo of Sarah Kim"><div class="act-body"><p><strong>Sarah Kim</strong> approved the Q3 design system audit</p><time datetime="2026-09-11T09:12">12 min ago · Design</time></div></li>
+            <li><img class="act-ava" src="https://i.pravatar.cc/72?img=12" alt="Profile photo of James Okafor"><div class="act-body"><p><strong>James Okafor</strong> deployed release <span class="mono">v4.2.0</span> to production</p><time datetime="2026-09-11T08:40">1 hr ago · Engineering</time></div></li>
+            <li><img class="act-ava" src="https://i.pravatar.cc/72?img=5" alt="Profile photo of Maria Lopez"><div class="act-body"><p><strong>Maria Lopez</strong> added 4 candidates to Sales pipeline</p><time datetime="2026-09-10T17:20">Yesterday · Sales</time></div></li>
+            <li><span class="act-ava-fallback" aria-hidden="true">✓</span><div class="act-body"><p><strong>System</strong> completed nightly accessibility scan — 0 issues</p><time datetime="2026-09-10T02:00">Nightly · Automated</time></div></li>
+          </ol>
+          <div style="margin-top:16px"><a class="link-arrow" href="#reports" data-page-link="reports">View full report →</a></div>
+        </section>
+      </div>
+
+      <!-- Recent users preview -->
+      <section class="card" aria-labelledby="recent-users-heading">
+        <div class="card-title-row">
+          <div><h2 id="recent-users-heading">Recently joined</h2><p class="card-sub">Newest members of the organisation</p></div>
+          <a class="link-arrow" href="#users" data-page-link="users">Manage all users →</a>
+        </div>
+        <div class="table-wrapper" role="region" aria-label="Recently joined users table" tabindex="0">
+          <table>
+            <caption>Newest team members <span>Showing the 5 most recently added employees</span></caption>
+            <thead><tr><th scope="col">Employee</th><th scope="col">Department</th><th scope="col">Status</th><th scope="col">Joined</th></tr></thead>
+            <tbody id="recentTbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======== PAGE: USERS ======== -->
+    <div class="page" data-page-panel="users" id="page-users" hidden>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol><li><a href="#dashboard" data-page-link="dashboard">Home</a></li><li aria-current="page">Users</li></ol>
+      </nav>
+      <div class="page-head">
+        <div>
+          <h1 id="users-title" tabindex="-1">Users</h1>
+          <p class="lede">Manage employees, roles and access. Search, filter, sort and take bulk actions.</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-secondary" id="exportCsvBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>
+            Export CSV</button>
+          <button type="button" class="btn btn-primary" data-open-modal="userModal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Add User</button>
+        </div>
+      </div>
+
+      <section class="card" aria-labelledby="filters-heading">
+        <h2 id="filters-heading" class="visually-hidden">Search and filter users</h2>
+        <form id="userFilters" class="toolbar-grid" aria-label="User filters">
+          <div class="field">
+            <label for="filterSearch">Search</label>
+            <input type="search" id="filterSearch" name="search" placeholder="Name or email…" autocomplete="off" aria-describedby="filterSearchHelp">
+            <p class="help" id="filterSearchHelp">Results update as you type.</p>
+          </div>
+          <div class="field">
+            <label for="filterDept">Department</label>
+            <select id="filterDept" name="department">
+              <option value="">All departments</option>
+              <option>Engineering</option><option>Design</option><option>Marketing</option>
+              <option>Sales</option><option>HR</option><option>Finance</option><option>Operations</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="filterStatus">Status</label>
+            <select id="filterStatus" name="status">
+              <option value="">All statuses</option>
+              <option value="Active">Active</option>
+              <option value="Invited">Invited</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+          </div>
+          <div class="field">
+            <button type="button" class="btn btn-secondary" id="resetFiltersBtn">Reset</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" aria-labelledby="users-table-heading">
+        <div class="table-head">
+          <h2 id="users-table-heading">Employees <span class="result-count" id="resultCount" aria-live="polite">(12 employees)</span></h2>
+          <div class="table-tools">
+            <button type="button" class="btn btn-sm btn-secondary" id="bulkDeleteBtn" disabled>Delete selected (<span id="selectedCount">0</span>)</button>
+          </div>
+        </div>
+        <div class="table-wrapper" role="region" aria-label="Employee directory, scroll horizontally on small screens" tabindex="0">
+          <table id="employeeTable">
+            <caption>Employee directory <span>Sortable and filterable list of all employees. Use column headers to sort.</span></caption>
+            <thead>
+              <tr>
+                <th scope="col"><input type="checkbox" class="check" id="selectAll" aria-label="Select all employees on this page"></th>
+                <th scope="col" data-col="id" aria-sort="ascending"><button type="button" class="th-sort" data-sort="id">ID <span aria-hidden="true" class="sort-ic">▲</span></button></th>
+                <th scope="col" data-col="name" aria-sort="none"><button type="button" class="th-sort" data-sort="name">Name <span aria-hidden="true" class="sort-ic">↕</span></button></th>
+                <th scope="col">Email</th>
+                <th scope="col" data-col="department" aria-sort="none"><button type="button" class="th-sort" data-sort="department">Department <span aria-hidden="true" class="sort-ic">↕</span></button></th>
+                <th scope="col" data-col="status" aria-sort="none"><button type="button" class="th-sort" data-sort="status">Status <span aria-hidden="true" class="sort-ic">↕</span></button></th>
+                <th scope="col"><span class="visually-hidden">Actions</span><span aria-hidden="true">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="userTbody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" hidden>
+            <h3>No employees found</h3>
+            <p>Try adjusting your search or filters, or add a new team member.</p>
+            <button type="button" class="btn btn-primary btn-sm" data-open-modal="userModal">Add User</button>
+          </div>
+        </div>
+        <div class="table-foot">
+          <p id="paginationInfo" aria-live="polite">Showing 1–5 of 12 employees</p>
+          <nav aria-label="Employee table pagination"><ul class="pagination" id="pagination"></ul></nav>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======== PAGE: REPORTS ======== -->
+    <div class="page" data-page-panel="reports" id="page-reports" hidden>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol><li><a href="#dashboard" data-page-link="dashboard">Home</a></li><li aria-current="page">Reports</li></ol>
+      </nav>
+      <div class="page-head">
+        <div>
+          <h1 id="reports-title" tabindex="-1">Reports</h1>
+          <p class="lede">Revenue, hiring and performance analytics with accessible data tables for every chart.</p>
+        </div>
+        <div class="page-actions">
+          <button type="button" class="btn btn-secondary" id="printReportBtn">Print report</button>
+          <button type="button" class="btn btn-primary" id="downloadCsvReportBtn">Download CSV</button>
+        </div>
+      </div>
+
+      <section aria-labelledby="report-kpi-heading">
+        <h2 id="report-kpi-heading" class="visually-hidden">Report key figures</h2>
+        <div class="mini-stats">
+          <div class="mini-stat"><span>Total revenue</span><strong>$1.24M</strong><small>▲ 14% vs last quarter</small></div>
+          <div class="mini-stat"><span>New hires</span><strong>48</strong><small>Across 5 departments</small></div>
+          <div class="mini-stat"><span>Attrition</span><strong>2.1%</strong><small>▼ 0.4 pts · healthy</small></div>
+          <div class="mini-stat"><span>NPS score</span><strong>72</strong><small>▲ 6 pts · excellent</small></div>
+        </div>
+      </section>
+
+      <div class="grid-2">
+        <section class="card" aria-labelledby="revenue-heading">
+          <div class="card-title-row">
+            <div><h2 id="revenue-heading">Revenue by month</h2><p class="card-sub">In thousands (USD)</p></div>
+            <div class="segmented" role="group" aria-label="Revenue year">
+              <button type="button" data-rev="2025" aria-pressed="false">2025</button>
+              <button type="button" data-rev="2026" aria-pressed="true">2026</button>
+            </div>
+          </div>
+          <div id="revenueChart" class="chart-bars" role="img" aria-label="Bar chart of monthly revenue. Peak in August at 184 thousand dollars."></div>
+          <details class="data-details">
+            <summary>View revenue data table <span aria-hidden="true">▾</span></summary>
+            <div class="details-body">
+              <div class="table-wrapper" role="region" aria-label="Revenue data table" tabindex="0">
+                <table style="min-width:420px">
+                  <caption class="visually-hidden">Monthly revenue figures</caption>
+                  <thead><tr><th scope="col">Month</th><th scope="col">Revenue ($k)</th><th scope="col">Growth</th></tr></thead>
+                  <tbody id="revenueTbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section class="card" aria-labelledby="dept-dist-heading">
+          <div class="card-title-row"><div><h2 id="dept-dist-heading">Headcount by department</h2><p class="card-sub">Distribution of 2,481 employees</p></div></div>
+          <div class="donut-wrap">
+            <svg class="donut" viewBox="0 0 120 120" role="img" aria-label="Donut chart: Engineering 34 percent, Sales 22 percent, Design 12 percent, Marketing 11 percent, Operations 12 percent, Other 9 percent.">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#F5F5F4" stroke-width="18"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#1C1917" stroke-width="18" stroke-dasharray="98 191" stroke-dashoffset="72" stroke-linecap="butt"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#57534E" stroke-width="18" stroke-dasharray="63 226" stroke-dashoffset="-26" stroke-linecap="butt"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#A8A29E" stroke-width="18" stroke-dasharray="35 254" stroke-dashoffset="-89" stroke-linecap="butt"/>
+              <circle cx="60" cy="60" r="46" fill="none" stroke="#D6D3D1" stroke-width="18" stroke-dasharray="93 196" stroke-dashoffset="-124" stroke-linecap="butt"/>
+              <text x="60" y="58" text-anchor="middle" font-size="20" font-weight="700" fill="#1C1917">2.4k</text>
+              <text x="60" y="74" text-anchor="middle" font-size="10" fill="#57534E">employees</text>
+            </svg>
+            <ul class="donut-legend">
+              <li><span class="legend-dot" style="background:#1C1917"></span>Engineering <strong>34%</strong></li>
+              <li><span class="legend-dot" style="background:#57534E"></span>Sales <strong>22%</strong></li>
+              <li><span class="legend-dot" style="background:#A8A29E"></span>Design <strong>12%</strong></li>
+              <li><span class="legend-dot" style="background:#D6D3D1"></span>Other <strong>32%</strong></li>
+            </ul>
+          </div>
+          <div style="margin-top:18px">
+            <h3 style="font-size:13.5px;margin-bottom:10px">Hiring goal progress</h3>
+            <div class="progress" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" aria-label="Annual hiring goal progress, 72 percent complete">
+              <div class="progress-bar" style="width:72%"></div>
+            </div>
+            <p class="help" style="margin-top:8px">72 of 100 planned hires completed · 28 remaining</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="card" aria-labelledby="summary-table-heading">
+        <div class="card-title-row">
+          <div><h2 id="summary-table-heading">Quarterly summary</h2><p class="card-sub">Audited figures · FY 2026</p></div>
+          <span class="badge badge-dark">● Audited</span>
+        </div>
+        <div class="table-wrapper" role="region" aria-label="Quarterly summary table" tabindex="0">
+          <table>
+            <caption>Quarterly business summary <span>Revenue, expenses and headcount per quarter</span></caption>
+            <thead><tr><th scope="col">Quarter</th><th scope="col">Revenue</th><th scope="col">Expenses</th><th scope="col">Profit</th><th scope="col">Headcount</th><th scope="col">Satisfaction</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Q1 2026</th><td>$284k</td><td>$192k</td><td>$92k</td><td>2,310</td><td>4.6 / 5</td></tr>
+              <tr><th scope="row">Q2 2026</th><td>$342k</td><td>$211k</td><td>$131k</td><td>2,402</td><td>4.7 / 5</td></tr>
+              <tr><th scope="row">Q3 2026</th><td>$418k</td><td>$238k</td><td>$180k</td><td>2,481</td><td>4.8 / 5</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ======== PAGE: SETTINGS ======== -->
+    <div class="page" data-page-panel="settings" id="page-settings" hidden>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol><li><a href="#dashboard" data-page-link="dashboard">Home</a></li><li aria-current="page">Settings</li></ol>
+      </nav>
+      <div class="page-head">
+        <div>
+          <h1 id="settings-title" tabindex="-1">Settings</h1>
+          <p class="lede">Manage your profile, notifications, security and accessibility preferences.</p>
+        </div>
+      </div>
+
+      <div class="settings-layout">
+        <nav class="settings-side" aria-label="Settings sections">
+          <ul role="tablist" aria-label="Settings categories" id="settingsTablist">
+            <li><button type="button" role="tab" id="tab-profile" aria-controls="panel-profile" aria-selected="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>Profile</button></li>
+            <li><button type="button" role="tab" id="tab-notif" aria-controls="panel-notif" aria-selected="false" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>Notifications</button></li>
+            <li><button type="button" role="tab" id="tab-sec" aria-controls="panel-sec" aria-selected="false" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Security</button></li>
+            <li><button type="button" role="tab" id="tab-a11y" aria-controls="panel-a11y" aria-selected="false" tabindex="-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="5" r="2"/><path d="M4 9h16M12 9v5m0 0-3 6m3-6 3 6"/></svg>Accessibility</button></li>
+          </ul>
+        </nav>
+
+        <div>
+          <!-- Profile panel -->
+          <section class="card" role="tabpanel" id="panel-profile" aria-labelledby="tab-profile" tabindex="0">
+            <h2 style="font-size:16px;margin-bottom:4px">Profile information</h2>
+            <p class="card-sub" style="margin-bottom:20px">Update your personal details and public profile.</p>
+            <form id="profileForm" novalidate>
+              <div style="display:flex;gap:18px;align-items:center;margin-bottom:20px;flex-wrap:wrap">
+                <img id="profilePreview" src="https://i.pravatar.cc/120?img=47" alt="Current profile photo of Amara Chen" width="72" height="72" style="border-radius:99px;border:2px solid var(--border)">
+                <div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button type="button" class="btn btn-secondary btn-sm" id="changeAvatarBtn">Change photo</button>
+                    <button type="button" class="btn btn-ghost btn-sm" id="removeAvatarBtn">Remove</button>
+                  </div>
+                  <p class="help" style="margin-top:8px">JPG or PNG, at least 200×200px. Max 2MB.</p>
+                </div>
+              </div>
+              <div class="form-grid-2">
+                <div class="field"><label for="setFullName">Full name <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="setFullName" name="fullName" value="Amara Chen" required autocomplete="name" minlength="3">
+                  <p class="error-msg" id="setFullNameErr" hidden>Please enter your full name.</p></div>
+                <div class="field"><label for="setEmail">Email address <span class="req" aria-hidden="true">*</span></label>
+                  <input type="email" id="setEmail" name="email" value="amara.chen@northwind.io" required autocomplete="email">
+                  <p class="error-msg" id="setEmailErr" hidden>Enter a valid email address.</p></div>
+                <div class="field"><label for="setPhone">Phone number</label>
+                  <input type="tel" id="setPhone" name="phone" value="+1 (415) 555-0132" autocomplete="tel" pattern="^\+?[0-9\s\-\(\)]{7,20}$" aria-describedby="setPhoneHelp">
+                  <p class="help" id="setPhoneHelp">Format: +1 (555) 000-0000</p></div>
+                <div class="field"><label for="setRole">Job title</label>
+                  <input type="text" id="setRole" name="role" value="Platform Administrator" autocomplete="organization-title"></div>
+                <div class="field"><label for="setDept">Department</label>
+                  <select id="setDept" name="department"><option>Engineering</option><option>Design</option><option>Operations</option><option selected>Operations</option><option>HR</option></select></div>
+                <div class="field"><label for="setLang">Language</label>
+                  <select id="setLang" name="language"><option selected>English (US)</option><option>English (UK)</option><option>Deutsch</option><option>Français</option><option>Español</option></select></div>
+              </div>
+              <div class="form-actions"><button type="reset" class="btn btn-ghost">Discard</button><button type="submit" class="btn btn-primary">Save changes</button></div>
+            </form>
+          </section>
+
+          <!-- Notifications panel -->
+          <section class="card" role="tabpanel" id="panel-notif" aria-labelledby="tab-notif" tabindex="0" hidden>
+            <h2 style="font-size:16px;margin-bottom:4px">Notification preferences</h2>
+            <p class="card-sub" style="margin-bottom:8px">Choose what you want to be notified about. Changes save instantly.</p>
+            <form id="notifForm" aria-label="Notification preferences">
+              <div class="switch-row"><div><h3>Email digest</h3><p>Daily summary of team activity at 8:00 AM.</p></div>
+                <label class="switch"><input type="checkbox" id="swEmail" checked><span class="switch-track"><span class="switch-thumb"></span></span><span class="visually-hidden">Toggle email digest</span></label></div>
+              <div class="switch-row"><div><h3>New user alerts</h3><p>Notify me when someone joins or leaves the organisation.</p></div>
+                <label class="switch"><input type="checkbox" id="swJoin" checked><span class="switch-track"><span class="switch-thumb"></span></span><span class="visually-hidden">Toggle new user alerts</span></label></div>
+              <div class="switch-row"><div><h3>Security alerts</h3><p>Critical sign-in and permission changes. Recommended.</p></div>
+                <label class="switch"><input type="checkbox" id="swSec" checked><span class="switch-track"><span class="switch-thumb"></span></span><span class="visually-hidden">Toggle security alerts</span></label></div>
+              <div class="switch-row"><div><h3>Marketing updates</h3><p>Product news and feature announcements.</p></div>
+                <label class="switch"><input type="checkbox" id="swMkt"><span class="switch-track"><span class="switch-thumb"></span></span><span class="visually-hidden">Toggle marketing updates</span></label></div>
+            </form>
+          </section>
+
+          <!-- Security panel -->
+          <section class="card" role="tabpanel" id="panel-sec" aria-labelledby="tab-sec" tabindex="0" hidden>
+            <h2 style="font-size:16px;margin-bottom:4px">Security</h2>
+            <p class="card-sub" style="margin-bottom:20px">Keep your account protected with a strong password and 2FA.</p>
+            <div class="alert alert-success" role="status" style="margin-bottom:20px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <div><strong>Two-factor authentication is on.</strong><br>Last verified 2 days ago via authenticator app.</div>
+            </div>
+            <form id="securityForm" novalidate>
+              <div class="form-grid-2">
+                <div class="field"><label for="curPw">Current password <span class="req" aria-hidden="true">*</span></label>
+                  <input type="password" id="curPw" autocomplete="current-password" required minlength="8"><p class="error-msg" id="curPwErr" hidden>Enter your current password.</p></div>
+                <div></div>
+                <div class="field"><label for="newPw">New password <span class="req" aria-hidden="true">*</span></label>
+                  <input type="password" id="newPw" autocomplete="new-password" required minlength="8" aria-describedby="newPwHelp newPwErr">
+                  <p class="help" id="newPwHelp">Min. 8 characters with upper, lower, number &amp; symbol.</p><p class="error-msg" id="newPwErr" hidden>Password does not meet requirements.</p></div>
+                <div class="field"><label for="newPw2">Confirm new password <span class="req" aria-hidden="true">*</span></label>
+                  <input type="password" id="newPw2" autocomplete="new-password" required><p class="error-msg" id="newPw2Err" hidden>Passwords do not match.</p></div>
+              </div>
+              <div class="form-actions"><button type="submit" class="btn btn-primary">Update password</button></div>
+            </form>
+          </section>
+
+          <!-- Accessibility panel -->
+          <section class="card" role="tabpanel" id="panel-a11y" aria-labelledby="tab-a11y" tabindex="0" hidden>
+            <h2 style="font-size:16px;margin-bottom:4px">Accessibility preferences</h2>
+            <p class="card-sub" style="margin-bottom:8px">These options adapt the interface to your needs and persist locally.</p>
+            <div class="switch-row"><div><h3>Reduce motion</h3><p>Disable animations and smooth scrolling.</p></div>
+              <label class="switch"><input type="checkbox" id="prefMotion"><span class="switch-track"><span class="switch-thumb"></span></span><span class="visually-hidden">Toggle reduce motion</span></label></div>
+            <div class="switch-row"><div><h3>High contrast focus</h3><p>Extra-visible focus rings for keyboard navigation.</p></div>
+              <label class="switch"><input type="checkbox" id="prefFocus" checked><span class="switch-track"><span class="switch-thumb"></span></span><span class="visually-hidden">Toggle high contrast focus</span></label></div>
+            <div class="field" style="margin-top:18px;max-width:320px">
+              <label for="prefFontSize">Interface text size</label>
+              <select id="prefFontSize"><option value="15">Default (15px)</option><option value="16">Large (16px)</option><option value="18">Extra large (18px)</option></select>
+            </div>
+            <div class="alert alert-info" role="note" style="margin-top:18px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 12v4"/></svg>
+              <div><strong>Keyboard tip:</strong> press <span class="kbd">/</span> to jump to search, <span class="kbd">Esc</span> to close dialogs, <span class="kbd">←</span><span class="kbd">→</span> to move between tabs.</div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======== PAGE: COMPONENTS ======== -->
+    <div class="page" data-page-panel="components" id="page-components" hidden>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol><li><a href="#dashboard" data-page-link="dashboard">Home</a></li><li aria-current="page">Components</li></ol>
+      </nav>
+      <div class="page-head">
+        <div>
+          <h1 id="components-title" tabindex="-1">Accessibility components</h1>
+          <p class="lede">Live, keyboard-operable demonstrations of WCAG 2.1 AA patterns used across this project.</p>
+        </div>
+        <div class="page-actions"><span class="badge badge-dark">WCAG 2.1 · AA</span><span class="badge">Keyboard tested</span></div>
+      </div>
+
+      <div class="alert alert-success" role="status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <div><strong>All demos are fully interactive.</strong> Every control is reachable by <kbd class="kbd">Tab</kbd> and operable with <kbd class="kbd">Enter</kbd> / <kbd class="kbd">Space</kbd> / arrow keys.</div>
+      </div>
+
+      <div class="demo-grid">
+        <!-- Buttons -->
+        <article class="card demo-card" aria-labelledby="demo-btn-h">
+          <h3 id="demo-btn-h">Buttons &amp; Badges</h3>
+          <p>Semantic <code>&lt;button&gt;</code> elements with visible focus and disabled states.</p>
+          <div class="demo-stage">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn btn-primary btn-sm">Primary</button>
+              <button type="button" class="btn btn-secondary btn-sm">Secondary</button>
+              <button type="button" class="btn btn-ghost btn-sm">Ghost</button>
+              <button type="button" class="btn btn-primary btn-sm" disabled>Disabled</button>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="badge badge-dark">Active</span><span class="badge">Draft</span><span class="badge badge-outline">Pending review</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Accordion -->
+        <article class="card demo-card" aria-labelledby="demo-acc-h">
+          <h3 id="demo-acc-h">Accordion</h3>
+          <p>Single-expand accordion using <code>aria-expanded</code> + <code>aria-controls</code>.</p>
+          <div class="accordion" id="demoAccordion">
+            <div class="accordion-item">
+              <h4><button type="button" class="accordion-btn" id="accBtn1" aria-expanded="true" aria-controls="accPanel1">What is semantic HTML? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h4>
+              <div class="accordion-panel" id="accPanel1" role="region" aria-labelledby="accBtn1"><p>Using elements like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> and <code>&lt;table&gt;</code> so assistive tech understands structure without extra ARIA.</p></div>
+            </div>
+            <div class="accordion-item">
+              <h4><button type="button" class="accordion-btn" id="accBtn2" aria-expanded="false" aria-controls="accPanel2">How is focus managed? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h4>
+              <div class="accordion-panel" id="accPanel2" role="region" aria-labelledby="accBtn2" hidden><p>Dialogs trap focus, return focus to the trigger on close, and pages move focus to the <code>&lt;h1&gt;</code> on navigation with an <code>aria-live</code> announcement.</p></div>
+            </div>
+            <div class="accordion-item">
+              <h4><button type="button" class="accordion-btn" id="accBtn3" aria-expanded="false" aria-controls="accPanel3">What contrast is required? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></h4>
+              <div class="accordion-panel" id="accPanel3" role="region" aria-labelledby="accBtn3" hidden><p>WCAG AA requires 4.5:1 for normal text and 3:1 for large text and UI components. This theme exceeds 7:1 for body copy.</p></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Tabs -->
+        <article class="card demo-card" aria-labelledby="demo-tabs-h">
+          <h3 id="demo-tabs-h">Tabs (roving tabindex)</h3>
+          <p>Arrow-key navigation with <code>role="tablist"</code> pattern.</p>
+          <div class="tabs">
+            <div role="tablist" aria-label="Demo tabs" id="demoTablist">
+              <button type="button" role="tab" id="dtab1" aria-controls="dpanel1" aria-selected="true">Overview</button>
+              <button type="button" role="tab" id="dtab2" aria-controls="dpanel2" aria-selected="false" tabindex="-1">Usage</button>
+              <button type="button" role="tab" id="dtab3" aria-controls="dpanel3" aria-selected="false" tabindex="-1">Code</button>
+            </div>
+            <div role="tabpanel" id="dpanel1" aria-labelledby="dtab1" tabindex="0"><p style="font-size:14px">Tabs group related content. Only one panel is visible; arrow keys move between tabs per WAI-ARIA Authoring Practices.</p></div>
+            <div role="tabpanel" id="dpanel2" aria-labelledby="dtab2" tabindex="0" hidden><p style="font-size:14px">Use <kbd class="kbd">←</kbd> <kbd class="kbd">→</kbd> to move, <kbd class="kbd">Home</kbd> / <kbd class="kbd">End</kbd> to jump. Activation is automatic on focus.</p></div>
+            <div role="tabpanel" id="dpanel3" aria-labelledby="dtab3" tabindex="0" hidden><p class="code">&lt;div role="tablist"&gt;…&lt;button role="tab" aria-selected="true"&gt;</p></div>
+          </div>
+        </article>
+
+        <!-- Alerts + tooltip + progress -->
+        <article class="card demo-card" aria-labelledby="demo-alert-h">
+          <h3 id="demo-alert-h">Alerts, tooltip &amp; progress</h3>
+          <p>Live regions announce status; tooltips appear on hover <em>and</em> focus.</p>
+          <div class="demo-stage">
+            <div class="alert alert-info" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 12v4"/></svg><div><strong>Heads up:</strong> reports refresh hourly.</div><button type="button" aria-label="Dismiss information" data-dismiss>✕</button></div>
+            <div>
+              <p style="font-size:13.5px;margin-bottom:8px">Storage used: <strong>68%</strong></p>
+              <div class="progress" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" aria-label="Storage used"><div class="progress-bar" style="width:68%"></div></div>
+            </div>
+            <div>
+              <span class="tooltip-wrap">
+                <button type="button" class="btn btn-secondary btn-sm" aria-describedby="demoTip">Hover or focus me</button>
+                <span class="tooltip" id="demoTip" role="tooltip">Accessible tooltip text</span>
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Form sample -->
+        <article class="card demo-card" aria-labelledby="demo-form-h">
+          <h3 id="demo-form-h">Accessible form pattern</h3>
+          <p>Every input has a label, help text via <code>aria-describedby</code>, errors via <code>aria-invalid</code>.</p>
+          <form id="demoForm" novalidate>
+            <div class="field"><label for="demoEmail">Work email <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="demoEmail" required autocomplete="email" aria-describedby="demoEmailHelp demoEmailErr" placeholder="you@company.com">
+              <p class="help" id="demoEmailHelp">We will never share your email.</p>
+              <p class="error-msg" id="demoEmailErr" hidden>Enter a valid work email.</p></div>
+            <div style="margin-top:12px;display:flex;gap:8px"><button type="submit" class="btn btn-primary btn-sm">Validate</button><button type="reset" class="btn btn-ghost btn-sm">Reset</button></div>
+          </form>
+        </article>
+
+        <!-- Dialog demo -->
+        <article class="card demo-card" aria-labelledby="demo-dialog-h">
+          <h3 id="demo-dialog-h">Modal dialog</h3>
+          <p>Focus-trapped dialog with <code>role="dialog"</code>, <code>aria-modal</code>, <kbd class="kbd">Esc</kbd> to close.</p>
+          <div class="demo-stage">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn btn-primary btn-sm" data-open-modal="userModal">Open “Add User” dialog</button>
+              <button type="button" class="btn btn-secondary btn-sm" data-open-modal="docsModal">Open docs dialog</button>
+            </div>
+            <p class="code">role="dialog" aria-modal="true" aria-labelledby="…"</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- Semantic elements reference -->
+      <section class="card" aria-labelledby="sem-heading">
+        <h2 id="sem-heading" style="font-size:16px">Semantic HTML5 used in this project</h2>
+        <p class="card-sub" style="margin-bottom:16px">No <code>div</code> soup — landmarks and structure carry meaning natively.</p>
+        <div class="table-wrapper" role="region" aria-label="Semantic elements reference table" tabindex="0">
+          <table style="min-width:560px">
+            <caption class="visually-hidden">Semantic elements and their purpose</caption>
+            <thead><tr><th scope="col">Element</th><th scope="col">Where used</th><th scope="col">Purpose</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">&lt;header&gt;</td><td>Top bar, card headers</td><td>Banner landmark</td></tr>
+              <tr><td class="mono">&lt;nav&gt;</td><td>Sidebar, breadcrumb, pagination, footer</td><td>Labelled navigation landmarks</td></tr>
+              <tr><td class="mono">&lt;main&gt;</td><td>Content area (id=main-content)</td><td>Primary content landmark</td></tr>
+              <tr><td class="mono">&lt;aside&gt;</td><td>Sidebar</td><td>Complementary navigation</td></tr>
+              <tr><td class="mono">&lt;section&gt; / &lt;article&gt;</td><td>Stats, cards, demos</td><td>Thematic grouping with headings</td></tr>
+              <tr><td class="mono">&lt;table&gt; + caption/thead/tbody/th</td><td>Users, reports</td><td>Accessible data tables with scope</td></tr>
+              <tr><td class="mono">&lt;footer&gt;</td><td>Page footer</td><td>Content-info landmark</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="#dashboard" data-page-link="dashboard" aria-label="Northwind Enterprise home">
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <span class="brand-text"><strong>Northwind</strong><span>ENTERPRISE</span></span>
+        </a>
+        <p>A calm, minimalist enterprise workspace built with semantic HTML5 and WCAG 2.1 AA accessibility from the ground up.</p>
+        <span class="wcag-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> WCAG 2.1 AA Compliant</span>
+      </div>
+      <nav aria-label="Product links"><h2>Product</h2>
+        <ul><li><a href="#dashboard" data-page-link="dashboard">Dashboard</a></li><li><a href="#users" data-page-link="users">Users</a></li><li><a href="#reports" data-page-link="reports">Reports</a></li><li><a href="#components" data-page-link="components">Components</a></li></ul>
+      </nav>
+      <nav aria-label="Company links"><h2>Company</h2>
+        <ul><li><a href="#settings" data-page-link="settings">About</a></li><li><a href="#settings" data-page-link="settings">Careers</a></li><li><a href="#reports" data-page-link="reports">Press</a></li><li><a href="#settings" data-page-link="settings">Contact</a></li></ul>
+      </nav>
+      <nav aria-label="Legal and accessibility links"><h2>Legal</h2>
+        <ul><li><button type="button" data-open-modal="docsModal" data-docs-tab="a11y">Accessibility statement</button></li>
+        <li><button type="button" data-open-modal="docsModal" data-docs-tab="readme">Privacy &amp; Terms</button></li>
+        <li><button type="button" data-open-modal="docsModal" data-docs-tab="valid">W3C validation</button></li></ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Northwind Inc. Crafted with semantic HTML, vanilla CSS &amp; JS.</p>
+      <nav aria-label="Footer utility"><ul><li><button type="button" data-open-modal="docsModal">README</button></li><li><button type="button" data-open-modal="docsModal" data-docs-tab="run">Run locally</button></li><li><a href="#main-content" id="backToTop">Back to top ↑</a></li></ul></nav>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= MODAL: ADD / EDIT USER ================= -->
+<div class="modal-overlay" id="userModalOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="userModalTitle" aria-describedby="userModalDesc" id="userModal">
+    <div class="modal-head">
+      <div><h2 id="userModalTitle">Add new user</h2><p id="userModalDesc">Fill in the details below. Fields marked <span aria-hidden="true" style="color:var(--danger)">*</span> are required.</p></div>
+      <button type="button" class="modal-close" data-close-modal aria-label="Close dialog"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="error-summary" id="userErrSummary" hidden tabindex="-1" role="alert" aria-labelledby="userErrSummaryH">
+        <h3 id="userErrSummaryH">⚠ Please fix the following errors:</h3>
+        <ul id="userErrList"></ul>
+      </div>
+      <form id="userForm" novalidate aria-label="Add new user form">
+        <input type="hidden" id="editUserId" value="">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="fullName">Full name <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="fullName" name="fullName" required minlength="3" maxlength="60" autocomplete="name" placeholder="e.g. Jordan Lee" aria-describedby="fullNameHelp fullNameErr">
+              <p class="help" id="fullNameHelp">First and last name, min. 3 characters.</p>
+              <p class="error-msg" id="fullNameErr" hidden>Please enter a full name (min. 3 characters).</p>
+            </div>
+            <div class="field">
+              <label for="userEmail">Email address <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="userEmail" name="email" required autocomplete="email" placeholder="jordan@company.com" aria-describedby="userEmailHelp userEmailErr">
+              <p class="help" id="userEmailHelp">Work email for login &amp; invites.</p>
+              <p class="error-msg" id="userEmailErr" hidden>Enter a valid email address.</p>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="userPhone">Phone number <span class="req" aria-hidden="true">*</span></label>
+              <input type="tel" id="userPhone" name="phone" required autocomplete="tel" placeholder="+1 (555) 000-0000" pattern="^\+?[0-9\s\-\(\)]{7,20}$" aria-describedby="userPhoneHelp userPhoneErr">
+              <p class="help" id="userPhoneHelp">Format: +1 (555) 000-0000</p>
+              <p class="error-msg" id="userPhoneErr" hidden>Enter a valid phone number.</p>
+            </div>
+            <div class="field">
+              <label for="userDept">Department <span class="req" aria-hidden="true">*</span></label>
+              <select id="userDept" name="department" required aria-describedby="userDeptErr">
+                <option value="" disabled selected>Select department…</option>
+                <option>Engineering</option><option>Design</option><option>Marketing</option><option>Sales</option><option>HR</option><option>Finance</option><option>Operations</option>
+              </select>
+              <p class="error-msg" id="userDeptErr" hidden>Please select a department.</p>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field">
+              <label for="userPw">Password <span class="req" aria-hidden="true">*</span></label>
+              <div class="pw-wrap">
+                <input type="password" id="userPw" name="password" required minlength="8" autocomplete="new-password" aria-describedby="userPwHelp userPwErr pwStrengthText" style="padding-right:70px">
+                <button type="button" class="pw-toggle" data-pw-toggle="userPw" aria-pressed="false" aria-label="Show password">Show</button>
+              </div>
+              <div class="strength"><div class="strength-track"><div class="strength-fill" id="pwStrengthFill"></div></div>
+              <p class="strength-text" id="pwStrengthText" aria-live="polite">Password strength: —</p></div>
+              <p class="help" id="userPwHelp">Min. 8 chars incl. upper, lower, number &amp; symbol.</p>
+              <p class="error-msg" id="userPwErr" hidden>Password must meet complexity requirements.</p>
+            </div>
+            <div class="field">
+              <label for="userPw2">Confirm password <span class="req" aria-hidden="true">*</span></label>
+              <div class="pw-wrap">
+                <input type="password" id="userPw2" name="confirmPassword" required autocomplete="new-password" aria-describedby="userPw2Err" style="padding-right:70px">
+                <button type="button" class="pw-toggle" data-pw-toggle="userPw2" aria-pressed="false" aria-label="Show confirm password">Show</button>
+              </div>
+              <p class="error-msg" id="userPw2Err" hidden style="margin-top:8px">Passwords do not match.</p>
+            </div>
+          </div>
+          <div class="field">
+            <label for="userMsg">Message <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+            <textarea id="userMsg" name="message" rows="3" maxlength="500" placeholder="Welcome note or context for this user…" aria-describedby="userMsgHelp userMsgCount"></textarea>
+            <p class="help" id="userMsgHelp">Shown to the user in their invite email.</p>
+            <p class="char-count" id="userMsgCount" aria-live="polite">0 / 500</p>
+          </div>
+          <div class="check-row">
+            <input type="checkbox" id="userTerms" name="terms" required aria-describedby="userTermsErr">
+            <label for="userTerms">I agree to the <a href="#components" data-page-link="components" id="termsLink">Terms &amp; Conditions</a> and confirm this user consents to data processing. <span class="req" aria-hidden="true" style="color:var(--danger)">*</span></label>
+          </div>
+          <p class="error-msg" id="userTermsErr" hidden>You must accept the Terms &amp; Conditions.</p>
+        </div>
+      </form>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
+      <button type="submit" class="btn btn-primary" form="userForm" id="userSubmitBtn">Create user</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= MODAL: VIEW USER ================= -->
+<div class="modal-overlay" id="viewModalOverlay" hidden>
+  <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="viewModalTitle" id="viewModal">
+    <div class="modal-head">
+      <div><h2 id="viewModalTitle">User details</h2><p>Read-only employee record.</p></div>
+      <button type="button" class="modal-close" data-close-modal aria-label="Close user details"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:14px;align-items:center">
+        <img id="viewAvatar" src="https://i.pravatar.cc/96?img=1" alt="" width="56" height="56" style="border-radius:99px;border:2px solid var(--border)">
+        <div><p style="font-weight:700;font-size:16px" id="viewName">—</p><p class="help" id="viewRole">—</p></div>
+      </div>
+      <hr class="divider">
+      <dl class="dl" id="viewDl">
+        <dt>Employee ID</dt><dd id="viewId">—</dd>
+        <dt>Email</dt><dd id="viewEmail">—</dd>
+        <dt>Phone</dt><dd id="viewPhone">—</dd>
+        <dt>Department</dt><dd id="viewDept">—</dd>
+        <dt>Status</dt><dd id="viewStatus">—</dd>
+        <dt>Joined</dt><dd id="viewJoined">—</dd>
+      </dl>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn btn-secondary" data-close-modal>Close</button><button type="button" class="btn btn-primary" id="viewEditBtn">Edit user</button></div>
+  </div>
+</div>
+
+<!-- ================= MODAL: DELETE CONFIRM ================= -->
+<div class="modal-overlay" id="deleteModalOverlay" hidden>
+  <div class="modal modal-sm" role="alertdialog" aria-modal="true" aria-labelledby="delTitle" aria-describedby="delDesc" id="deleteModal">
+    <div class="modal-head">
+      <div><h2 id="delTitle">Delete user?</h2><p id="delDesc">This action cannot be undone.</p></div>
+      <button type="button" class="modal-close" data-close-modal aria-label="Cancel deletion"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px">You are about to permanently remove <strong id="delUserName">this user</strong> (<span id="delUserEmail" class="mono">—</span>). Their access will be revoked immediately.</p>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn btn-secondary" data-close-modal>Cancel</button><button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete user</button></div>
+  </div>
+</div>
+
+<!-- ================= MODAL: DOCS / README ================= -->
+<div class="modal-overlay" id="docsModalOverlay" hidden>
+  <div class="modal modal-lg" role="dialog" aria-modal="true" aria-labelledby="docsTitle" aria-describedby="docsDesc" id="docsModal">
+    <div class="modal-head">
+      <div><h2 id="docsTitle">Project documentation</h2><p id="docsDesc">README, structure, accessibility audit &amp; run instructions — everything needed for GitHub.</p></div>
+      <button type="button" class="modal-close" data-close-modal aria-label="Close documentation"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="docs-tabs" role="tablist" aria-label="Documentation sections" id="docsTablist">
+        <button type="button" role="tab" id="dtab-readme" aria-controls="dp-readme" aria-selected="true">README</button>
+        <button type="button" role="tab" id="dtab-struct" aria-controls="dp-struct" aria-selected="false">Folder structure</button>
+        <button type="button" role="tab" id="dtab-run" aria-controls="dp-run" aria-selected="false">Run locally</button>
+        <button type="button" role="tab" id="dtab-a11y" aria-controls="dp-a11y" aria-selected="false">Accessibility</button>
+        <button type="button" role="tab" id="dtab-kbd" aria-controls="dp-kbd" aria-selected="false">Keyboard</button>
+        <button type="button" role="tab" id="dtab-valid" aria-controls="dp-valid" aria-selected="false">W3C checklist</button>
+      </div>
+
+      <div class="docs-panel" role="tabpanel" id="dp-readme" aria-labelledby="dtab-readme" tabindex="0">
+        <h3>Northwind Enterprise Dashboard</h3>
+        <p>A professional, responsive, multi-page enterprise dashboard demonstrating <strong>Semantic HTML5</strong> and <strong>WCAG 2.1 AA</strong> accessibility with vanilla HTML + CSS + JS — zero frameworks.</p>
+        <h3>Pages included</h3>
+        <ul><li><strong>index.html → Dashboard Home</strong> — stats, performance chart, activity, recent users</li>
+        <li><strong>users.html → Users Management</strong> — searchable, sortable, paginated data table</li>
+        <li><strong>reports.html → Reports</strong> — revenue charts with data-table alternatives, quarterly summary</li>
+        <li><strong>settings.html → Settings</strong> — profile, notifications, security, accessibility prefs</li>
+        <li><strong>components.html → Accessibility Demo</strong> — accordion, tabs, alerts, tooltips, dialogs</li></ul>
+        <p><em>Note:</em> this deliverable bundles all five pages into one deployable file with client-side routing (hash-based), preserving identical semantics, landmarks and heading order per page. Split by <code>data-page-panel</code> blocks to recreate the multi-file layout below.</p>
+      </div>
+
+      <div class="docs-panel" role="tabpanel" id="dp-struct" aria-labelledby="dtab-struct" tabindex="0" hidden>
+        <h3>Suggested folder structure</h3>
+        <p class="folder-tree">project/
+├── index.html          → Dashboard Home
+├── users.html          → Users Management
+├── reports.html        → Reports Page
+├── settings.html       → Settings Page
+├── components.html     → Accessibility Components Demo
+├── css/
+│   └── style.css       → All styles (copy &lt;style&gt; block)
+├── js/
+│   └── script.js       → All logic (copy &lt;script&gt; block)
+├── assets/
+│   └── avatars/        → Profile photos (or pravatar URLs)
+└── README.md           → This documentation</p>
+        <h3>How to split this file</h3>
+        <ol><li>Copy the <code>&lt;style&gt;…&lt;/style&gt;</code> contents into <code>css/style.css</code> and link it.</li>
+        <li>Copy the <code>&lt;script&gt;…&lt;/script&gt;</code> contents into <code>js/script.js</code> and reference it with <code>defer</code>.</li>
+        <li>Duplicate the file 5×; keep one <code>data-page-panel</code> per page and update <code>aria-current</code>.</li></ol>
+      </div>
+
+      <div class="docs-panel" role="tabpanel" id="dp-run" aria-labelledby="dtab-run" tabindex="0" hidden>
+        <h3>Run locally (VS Code)</h3>
+        <ol><li>Save the file as <code>index.html</code> inside <code>project/</code>.</li>
+        <li>Install the <strong>Live Server</strong> extension (Ritwick Dey).</li>
+        <li>Right-click <code>index.html</code> → <strong>Open with Live Server</strong>.</li>
+        <li>Visit <code>http://127.0.0.1:5500</code> — navigate via sidebar or URLs <code>#dashboard #users #reports #settings #components</code>.</li></ol>
+        <h3>Deploy to GitHub Pages</h3>
+        <ol><li><code>git init → git add . → git commit -m "Accessible enterprise dashboard"</code></li>
+        <li>Push to GitHub → Settings → Pages → Deploy from branch <code>main</code> / root.</li></ol>
+      </div>
+
+      <div class="docs-panel" role="tabpanel" id="dp-a11y" aria-labelledby="dtab-a11y" tabindex="0" hidden>
+        <h3>Accessibility features implemented</h3>
+        <ul class="check-list">
+          <li><span class="tick" aria-hidden="true">✓</span><span>Skip links, landmarks (<code>header/nav/main/aside/footer</code>), single <code>h1</code> per page in logical order</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Visible <code>:focus-visible</code> rings (3px, 3:1+) on every interactive element</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Labels for all inputs; <code>aria-describedby</code> help + error text; <code>aria-invalid</code> on failure; error summary with focus</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Dialogs: <code>role="dialog/alertdialog"</code>, <code>aria-modal</code>, focus trap, <kbd class="kbd">Esc</kbd> + overlay click to close, focus returned to trigger</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Tables: <code>caption/thead/tbody/th scope</code>, <code>aria-sort</code>, scrollable <code>role="region"</code> with keyboard access</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Contrast ≥ 7:1 body, ≥ 4.5:1 muted; <code>prefers-reduced-motion</code> respected; live regions for toasts, counts &amp; page changes</span></li>
+        </ul>
+      </div>
+
+      <div class="docs-panel" role="tabpanel" id="dp-kbd" aria-labelledby="dtab-kbd" tabindex="0" hidden>
+        <h3>Keyboard navigation</h3>
+        <div class="table-wrapper"><table class="kbd-table">
+          <thead><tr><th scope="col">Keys</th><th scope="col">Action</th></tr></thead>
+          <tbody>
+            <tr><td><span class="kbd">Tab</span> / <span class="kbd">Shift+Tab</span></td><td>Move through all links, buttons, inputs</td></tr>
+            <tr><td><span class="kbd">/</span></td><td>Focus global search from anywhere</td></tr>
+            <tr><td><span class="kbd">Enter</span> / <span class="kbd">Space</span></td><td>Activate buttons, sort columns, toggle switches</td></tr>
+            <tr><td><span class="kbd">←</span> <span class="kbd">→</span> <span class="kbd">Home</span> <span class="kbd">End</span></td><td>Move between tabs</td></tr>
+            <tr><td><span class="kbd">Esc</span></td><td>Close topmost dialog / dropdown / mobile menu</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="docs-panel" role="tabpanel" id="dp-valid" aria-labelledby="dtab-valid" tabindex="0" hidden>
+        <h3>W3C validation checklist</h3>
+        <ul class="check-list">
+          <li><span class="tick" aria-hidden="true">✓</span><span><code>&lt;!DOCTYPE html&gt;</code> + <code>lang="en"</code> + charset + viewport + descriptive <code>&lt;title&gt;</code></span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Zero unclosed tags; no duplicate IDs; valid nesting (<code>ul&gt;li</code>, <code>table&gt;thead/tbody</code>)</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>All <code>&lt;img&gt;</code> have meaningful <code>alt</code>; decorative SVGs <code>aria-hidden="true"</code></span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Native <code>&lt;button&gt;/&lt;a&gt;/&lt;label&gt;/&lt;select&gt;</code> — no clickable divs</span></li>
+          <li><span class="tick" aria-hidden="true">✓</span><span>Validate at <strong>validator.w3.org</strong> + axe DevTools: target 0 errors, 0 contrast violations</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="modal-foot"><button type="button" class="btn btn-secondary" data-close-modal>Close</button><button type="button" class="btn btn-primary" id="copyReadmeBtn">Copy README</button></div>
+  </div>
+</div>
+
+<!-- Toasts -->
+<div class="toast-region" id="toastRegion" aria-live="polite" aria-label="Notifications"></div>
+
+<script>
+/* ============================================================
+   NORTHWIND ENTERPRISE — VANILLA JS
+   Modules: utils, router, sidebar, dropdown, modal, tables,
+   charts, forms, tabs, accordion, settings, toasts
+   ============================================================ */
+(function(){
+"use strict";
+
+/* ---------- Utils ---------- */
+const $  = (sel, ctx=document)=>ctx.querySelector(sel);
+const $$ = (sel, ctx=document)=>Array.from(ctx.querySelectorAll(sel));
+const announcer = $('#announcer');
+function announce(msg){ announcer.textContent=''; requestAnimationFrame(()=>{announcer.textContent=msg;}); }
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Toasts ---------- */
+const toastRegion = $('#toastRegion');
+function toast(title, msg, type='success'){
+  const el=document.createElement('div');
+  el.className='toast '+type; el.setAttribute('role','status');
+  el.innerHTML='<div><strong></strong><p></p></div><button type="button" aria-label="Dismiss notification">✕</button>';
+  el.querySelector('strong').textContent=title;
+  el.querySelector('p').textContent=msg;
+  el.querySelector('button').addEventListener('click',()=>el.remove());
+  toastRegion.appendChild(el);
+  announce(title+'. '+msg);
+  setTimeout(()=>{ if(el.isConnected){ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(),320);} },4500);
+}
+
+/* ---------- Data ---------- */
+let users=[
+  {id:1001,name:'Amara Chen',email:'amara.chen@northwind.io',phone:'+1 (415) 555-0132',dept:'Operations',status:'Active',joined:'2023-02-14',img:47},
+  {id:1002,name:'James Okafor',email:'james.okafor@northwind.io',phone:'+1 (415) 555-0188',dept:'Engineering',status:'Active',joined:'2022-06-01',img:12},
+  {id:1003,name:'Sarah Kim',email:'sarah.kim@northwind.io',phone:'+1 (415) 555-0119',dept:'Design',status:'Active',joined:'2026-08-30',img:32},
+  {id:1004,name:'Maria Lopez',email:'maria.lopez@northwind.io',phone:'+1 (415) 555-0145',dept:'Sales',status:'Active',joined:'2024-01-22',img:5},
+  {id:1005,name:'David Park',email:'david.park@northwind.io',phone:'+1 (415) 555-0173',dept:'Engineering',status:'Invited',joined:'2026-09-02',img:15},
+  {id:1006,name:'Elena Rossi',email:'elena.rossi@northwind.io',phone:'+1 (415) 555-0161',dept:'Marketing',status:'Active',joined:'2023-11-05',img:44},
+  {id:1007,name:'Tom Becker',email:'tom.becker@northwind.io',phone:'+1 (415) 555-0120',dept:'Finance',status:'Inactive',joined:'2021-04-18',img:53},
+  {id:1008,name:'Priya Nair',email:'priya.nair@northwind.io',phone:'+1 (415) 555-0190',dept:'HR',status:'Active',joined:'2026-07-12',img:26},
+  {id:1009,name:'Lucas Meyer',email:'lucas.meyer@northwind.io',phone:'+1 (415) 555-0156',dept:'Engineering',status:'Active',joined:'2025-09-09',img:59},
+  {id:1010,name:'Aisha Bello',email:'aisha.bello@northwind.io',phone:'+1 (415) 555-0108',dept:'Design',status:'Invited',joined:'2026-09-08',img:20},
+  {id:1011,name:'Chris Novak',email:'chris.novak@northwind.io',phone:'+1 (415) 555-0139',dept:'Sales',status:'Inactive',joined:'2020-12-03',img:68},
+  {id:1012,name:'Yuki Tanaka',email:'yuki.tanaka@northwind.io',phone:'+1 (415) 555-0177',dept:'Operations',status:'Active',joined:'2026-08-14',img:31}
+];
+const deptOf = u=>u.dept;
+
+/* ---------- Router (multi-page simulation) ---------- */
+const pageTitles={dashboard:'Dashboard',users:'Users',reports:'Reports',settings:'Settings',components:'Components'};
+let currentPage='dashboard';
+function showPage(id, opts={}){
+  if(!pageTitles[id]) id='dashboard';
+  currentPage=id;
+  $$('[data-page-panel]').forEach(p=>{
+    const match=p.dataset.pagePanel===id;
+    if(match){p.hidden=false;} else {p.hidden=true;}
+  });
+  $$('[data-page-link]').forEach(a=>{
+    if(a.dataset.pageLink===id){a.setAttribute('aria-current','page');}
+    else{a.removeAttribute('aria-current');}
+  });
+  document.title='Northwind Enterprise — '+pageTitles[id];
+  if(location.hash!=='#'+id && !opts.skipHash){ history.replaceState(null,'','#'+id); }
+  closeMobileSidebar();
+  const h1=$('#page-'+id+' h1');
+  if(h1 && !opts.noFocus){ h1.focus({preventScroll:true}); window.scrollTo({top:0,behavior: prefersReduced?'auto':'smooth'}); }
+  announce(pageTitles[id]+' page loaded.');
+}
+document.addEventListener('click',e=>{
+  const link=e.target.closest('[data-page-link]');
+  if(link){ e.preventDefault(); showPage(link.dataset.pageLink); const dd=$('#notifPanel'); if(!dd.hidden) closeNotif(); }
+  const goto=e.target.closest('[data-page-goto]');
+  if(goto){ showPage(goto.dataset.pageGoto); }
+});
+window.addEventListener('hashchange',()=>{ const id=location.hash.replace('#',''); if(id&&id!==currentPage) showPage(id); });
+
+/* ---------- Sidebar ---------- */
+const sidebar=$('#sidebar'), backdrop=$('#backdrop'), mobileBtn=$('#mobileMenuBtn'), collapseBtn=$('#collapseBtn');
+function openMobileSidebar(){ sidebar.classList.add('open'); backdrop.hidden=false; mobileBtn.setAttribute('aria-expanded','true'); mobileBtn.setAttribute('aria-label','Close navigation menu'); }
+function closeMobileSidebar(){ if(window.innerWidth>920) return; sidebar.classList.remove('open'); backdrop.hidden=true; mobileBtn.setAttribute('aria-expanded','false'); mobileBtn.setAttribute('aria-label','Open navigation menu'); }
+mobileBtn.addEventListener('click',()=>{ sidebar.classList.contains('open')?closeMobileSidebar():openMobileSidebar(); });
+backdrop.addEventListener('click',closeMobileSidebar);
+collapseBtn.addEventListener('click',()=>{
+  const collapsed=document.body.classList.toggle('sidebar-collapsed');
+  collapseBtn.setAttribute('aria-expanded', String(!collapsed));
+  collapseBtn.querySelector('.collapse-text').textContent = collapsed?'Expand sidebar':'Collapse sidebar';
+  announce(collapsed?'Sidebar collapsed.':'Sidebar expanded.');
+});
+
+/* ---------- Notifications dropdown ---------- */
+const notifBtn=$('#notifBtn'), notifPanel=$('#notifPanel');
+function closeNotif(){ notifPanel.hidden=true; notifBtn.setAttribute('aria-expanded','false'); }
+notifBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  const open=notifPanel.hidden;
+  notifPanel.hidden=!open;
+  notifBtn.setAttribute('aria-expanded',String(open));
+});
+document.addEventListener('click',e=>{ if(!e.target.closest('.dropdown')) closeNotif(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!notifPanel.hidden){ closeNotif(); notifBtn.focus(); }});
+$('#markReadBtn').addEventListener('click',()=>{ const b=notifBtn.querySelector('.dot-badge'); if(b) b.remove(); notifBtn.setAttribute('aria-label','Notifications, no unread'); toast('Done','All notifications marked as read.','info'); closeNotif(); });
+
+/* ---------- Global search shortcut ---------- */
+document.addEventListener('keydown',e=>{
+  if(e.key==='/' && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){ e.preventDefault(); $('#siteSearch')?.focus(); }
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); $('#siteSearch')?.focus(); }
+});
+$('#siteSearchForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const q=$('#siteSearch').value.trim();
+  $('#filterSearch').value=q; state.search=q; state.page=1; renderTable();
+  showPage('users');
+  toast('Search', q?('Showing results for “'+q+'”.'):'Showing all users.','info');
+});
+
+/* ---------- Modal manager (focus trap, esc, overlay, return focus) ---------- */
+let lastTrigger=null, activeOverlay=null;
+const overlays={ userModal:$('#userModalOverlay'), viewModal:$('#viewModalOverlay'), deleteModal:$('#deleteModalOverlay'), docsModal:$('#docsModalOverlay') };
+function focusableIn(root){ return $$('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])',root).filter(el=>el.offsetParent!==null||el===document.activeElement); }
+function openModal(name, trigger){
+  const ov=overlays[name]; if(!ov) return;
+  lastTrigger=trigger||document.activeElement;
+  Object.values(overlays).forEach(o=>{o.hidden=true;o.classList.remove('show');});
+  ov.hidden=false; requestAnimationFrame(()=>ov.classList.add('show'));
+  activeOverlay=ov;
+  document.body.style.overflow='hidden';
+  const dlg=ov.querySelector('[role="dialog"],[role="alertdialog"]');
+  setTimeout(()=>{ const f=focusableIn(dlg); (dlg.querySelector('input,select,textarea')||f[0])?.focus(); },60);
+  announce(dlg.querySelector('h2')?.textContent+' dialog opened.');
+}
+function closeModal(){
+  if(!activeOverlay) return;
+  activeOverlay.classList.remove('show');
+  const ov=activeOverlay; activeOverlay=null;
+  setTimeout(()=>{ov.hidden=true;},180);
+  document.body.style.overflow='';
+  if(lastTrigger&&lastTrigger.isConnected){ lastTrigger.focus(); }
+  announce('Dialog closed.');
+}
+document.addEventListener('click',e=>{
+  const opener=e.target.closest('[data-open-modal]');
+  if(opener){
+    const name=opener.dataset.openModal;
+    if(name==='userModal'){ resetUserForm(); }
+    if(opener.dataset.docsTab){ selectDocsTab(opener.dataset.docsTab); }
+    openModal(name, opener);
+    return;
+  }
+  if(e.target.closest('[data-close-modal]')){ closeModal(); return; }
+  if(e.target.classList&&e.target.classList.contains('modal-overlay')){ closeModal(); }
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&activeOverlay){ e.preventDefault(); closeModal(); return; }
+  if(e.key==='Tab'&&activeOverlay){
+    const dlg=activeOverlay.querySelector('.modal');
+    const f=focusableIn(dlg); if(!f.length) return;
+    const first=f[0], last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+});
+
+/* ---------- Tables: filter / sort / paginate ---------- */
+const state={search:'',dept:'',status:'',sortKey:'id',sortDir:'asc',page:1,perPage:5,selected:new Set()};
+const tbody=$('#userTbody'), pagination=$('#pagination'), paginationInfo=$('#paginationInfo'),
+      resultCount=$('#resultCount'), emptyState=$('#emptyState'), selectAll=$('#selectAll'),
+      bulkBtn=$('#bulkDeleteBtn'), selectedCount=$('#selectedCount');
+
+function filteredUsers(){
+  let arr=[...users];
+  if(state.search){ const q=state.search.toLowerCase(); arr=arr.filter(u=>u.name.toLowerCase().includes(q)||u.email.toLowerCase().includes(q)); }
+  if(state.dept) arr=arr.filter(u=>u.dept===state.dept);
+  if(state.status) arr=arr.filter(u=>u.status===state.status);
+  arr.sort((a,b)=>{
+    let x=a[state.sortKey], y=b[state.sortKey];
+    if(typeof x==='string'){x=x.toLowerCase();y=y.toLowerCase();}
+    if(x<y) return state.sortDir==='asc'?-1:1;
+    if(x>y) return state.sortDir==='asc'?1:-1;
+    return 0;
+  });
+  return arr;
+}
+function statusClass(s){ return s==='Active'?'status-active':s==='Invited'?'status-invited':'status-inactive'; }
+function renderTable(){
+  const data=filteredUsers();
+  const total=data.length, pages=Math.max(1,Math.ceil(total/state.perPage));
+  if(state.page>pages) state.page=pages;
+  const start=(state.page-1)*state.perPage, slice=data.slice(start,start+state.perPage);
+  tbody.innerHTML='';
+  slice.forEach(u=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td><input type="checkbox" class="check row-check" data-id="'+u.id+'" aria-label="Select '+u.name+'"></td>'+
+      '<td class="mono">'+u.id+'</td>'+
+      '<td><div class="user-cell"><img src="https://i.pravatar.cc/68?img='+u.img+'" alt="Profile photo of '+u.name+'" width="34" height="34" loading="lazy"><div><strong>'+u.name+'</strong><span>ID '+u.id+'</span></div></div></td>'+
+      '<td><a href="mailto:'+u.email+'">'+u.email+'</a></td>'+
+      '<td>'+u.dept+'</td>'+
+      '<td><span class="status '+statusClass(u.status)+'">'+u.status+'</span></td>'+
+      '<td><div class="row-actions">'+
+        '<button type="button" class="icon-btn" data-act="view" data-id="'+u.id+'" aria-label="View details for '+u.name+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>'+
+        '<button type="button" class="icon-btn" data-act="edit" data-id="'+u.id+'" aria-label="Edit '+u.name+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>'+
+        '<button type="button" class="icon-btn danger" data-act="del" data-id="'+u.id+'" aria-label="Delete '+u.name+'"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button>'+
+      '</div></td>';
+    tbody.appendChild(tr);
+  });
+  // wire row checks
+  $$('.row-check',tbody).forEach(c=>{
+    c.checked=state.selected.has(Number(c.dataset.id));
+    c.addEventListener('change',()=>{
+      const id=Number(c.dataset.id);
+      c.checked?state.selected.add(id):state.selected.delete(id);
+      syncSelection();
+    });
+  });
+  // empty
+  const hasRows=slice.length>0;
+  $('#employeeTable').style.display=hasRows?'':'none';
+  emptyState.hidden=hasRows;
+  // sort indicators
+  $$('#employeeTable thead th[data-col]').forEach(th=>{
+    const key=th.dataset.col;
+    const btn=th.querySelector('.sort-ic');
+    if(key===state.sortKey){ th.setAttribute('aria-sort',state.sortDir==='asc'?'ascending':'descending'); if(btn) btn.textContent=state.sortDir==='asc'?'▲':'▼'; }
+    else{ th.setAttribute('aria-sort','none'); if(btn) btn.textContent='↕'; }
+  });
+  // info + pagination
+  const from=total===0?0:start+1, to=Math.min(start+state.perPage,total);
+  paginationInfo.textContent='Showing '+from+'–'+to+' of '+total+' employees';
+  resultCount.textContent='('+total+' employee'+(total===1?'':'s')+')';
+  $('#navUserCount').textContent=users.length;
+  pagination.innerHTML='';
+  const mk=(label,page,opts={})=>{
+    const li=document.createElement('li');
+    const b=document.createElement('button');
+    b.type='button'; b.textContent=label;
+    if(opts.aria) b.setAttribute('aria-label',opts.aria);
+    if(opts.current) b.setAttribute('aria-current','page');
+    b.disabled=!!opts.disabled;
+    b.addEventListener('click',()=>{state.page=page;renderTable();announce('Page '+page+' of '+pages);});
+    li.appendChild(b); pagination.appendChild(li);
+  };
+  mk('‹',Math.max(1,state.page-1),{aria:'Previous page',disabled:state.page===1});
+  for(let i=1;i<=pages;i++) mk(String(i),i,{aria:'Page '+i,current:i===state.page});
+  mk('›',Math.min(pages,state.page+1),{aria:'Next page',disabled:state.page===pages});
+  syncSelection();
+  renderRecent();
+}
+function syncSelection(){
+  const n=state.selected.size;
+  selectedCount.textContent=n;
+  bulkBtn.disabled=n===0;
+  const visible=$$('.row-check',tbody);
+  const checked=visible.filter(c=>c.checked);
+  selectAll.checked=visible.length>0&&checked.length===visible.length;
+  selectAll.indeterminate=checked.length>0&&checked.length<visible.length;
+}
+selectAll.addEventListener('change',()=>{
+  $$('.row-check',tbody).forEach(c=>{
+    c.checked=selectAll.checked;
+    const id=Number(c.dataset.id);
+    selectAll.checked?state.selected.add(id):state.selected.delete(id);
+  });
+  syncSelection();
+});
+$('#filterSearch').addEventListener('input',e=>{state.search=e.target.value.trim();state.page=1;renderTable();});
+$('#filterDept').addEventListener('change',e=>{state.dept=e.target.value;state.page=1;renderTable();});
+$('#filterStatus').addEventListener('change',e=>{state.status=e.target.value;state.page=1;renderTable();});
+$('#resetFiltersBtn').addEventListener('click',()=>{
+  $('#userFilters').reset(); state.search='';state.dept='';state.status='';state.page=1;state.sortKey='id';state.sortDir='asc';renderTable();
+  toast('Filters reset','Showing all employees.','info'); $('#filterSearch').focus();
+});
+$$('[data-sort]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.sort;
+  if(state.sortKey===k){state.sortDir=state.sortDir==='asc'?'desc':'asc';}
+  else{state.sortKey=k;state.sortDir='asc';}
+  renderTable();
+  announce('Sorted by '+k+' '+state.sortDir+'.');
+}));
+// row actions (delegate)
+tbody.addEventListener('click',e=>{
+  const btn=e.target.closest('button[data-act]'); if(!btn) return;
+  const id=Number(btn.dataset.id);
+  const u=users.find(x=>x.id===id); if(!u) return;
+  if(btn.dataset.act==='view') openView(u,btn);
+  if(btn.dataset.act==='edit'){ openEdit(u,btn); }
+  if(btn.dataset.act==='del'){ openDelete(u,btn); }
+});
+bulkBtn.addEventListener('click',()=>{
+  if(state.selected.size===0) return;
+  const n=state.selected.size;
+  users=users.filter(u=>!state.selected.has(u.id));
+  state.selected.clear(); state.page=1; renderTable();
+  toast('Deleted', n+' user'+(n>1?'s':'')+' removed.','success');
+});
+$('#exportCsvBtn').addEventListener('click',()=>downloadCSV(filteredUsers(),'employees.csv'));
+
+/* Recent preview */
+function renderRecent(){
+  const el=$('#recentTbody'); if(!el) return;
+  const sorted=[...users].sort((a,b)=>new Date(b.joined)-new Date(a.joined)).slice(0,5);
+  el.innerHTML='';
+  sorted.forEach(u=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><div class="user-cell"><img src="https://i.pravatar.cc/68?img='+u.img+'" alt="Profile photo of '+u.name+'" width="34" height="34" loading="lazy"><div><strong>'+u.name+'</strong><span>'+u.email+'</span></div></div></td>'+
+    '<td>'+u.dept+'</td><td><span class="status '+statusClass(u.status)+'">'+u.status+'</span></td><td><time datetime="'+u.joined+'">'+fmtDate(u.joined)+'</time></td>';
+    el.appendChild(tr);
+  });
+}
+function fmtDate(s){ try{return new Date(s+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}catch{return s;} }
+
+/* View / Edit / Delete */
+let pendingDeleteId=null;
+function openView(u,trigger){
+  $('#viewAvatar').src='https://i.pravatar.cc/112?img='+u.img;
+  $('#viewAvatar').alt='Profile photo of '+u.name;
+  $('#viewName').textContent=u.name; $('#viewRole').textContent=u.dept+' · '+u.status;
+  $('#viewId').textContent=u.id; $('#viewEmail').textContent=u.email;
+  $('#viewPhone').textContent=u.phone||'—'; $('#viewDept').textContent=u.dept;
+  $('#viewStatus').innerHTML='<span class="status '+statusClass(u.status)+'">'+u.status+'</span>';
+  $('#viewJoined').textContent=fmtDate(u.joined);
+  $('#viewEditBtn').onclick=()=>{ closeModal(); setTimeout(()=>openEdit(u,trigger),200); };
+  openModal('viewModal',trigger);
+}
+function openEdit(u,trigger){
+  resetUserForm();
+  $('#userModalTitle').textContent='Edit user';
+  $('#userSubmitBtn').textContent='Save changes';
+  $('#editUserId').value=u.id;
+  $('#fullName').value=u.name; $('#userEmail').value=u.email;
+  $('#userPhone').value=u.phone||''; $('#userDept').value=u.dept;
+  $('#userModalDesc').textContent='Editing '+u.name+' (ID '+u.id+'). Password fields are optional when editing.';
+  $('#userPw').required=false; $('#userPw2').required=false;
+  openModal('userModal',trigger);
+}
+function openDelete(u,trigger){
+  pendingDeleteId=u.id;
+  $('#delUserName').textContent=u.name; $('#delUserEmail').textContent=u.email;
+  openModal('deleteModal',trigger);
+}
+$('#confirmDeleteBtn').addEventListener('click',()=>{
+  if(pendingDeleteId==null) return;
+  const u=users.find(x=>x.id===pendingDeleteId);
+  users=users.filter(x=>x.id!==pendingDeleteId);
+  state.selected.delete(pendingDeleteId); renderTable(); closeModal();
+  toast('User deleted', (u?u.name:'User')+' was removed.','success');
+});
+
+/* ---------- User form: validation ---------- */
+const userForm=$('#userForm');
+function setErr(input, errEl, bad){
+  errEl.hidden=!bad;
+  input.setAttribute('aria-invalid', bad?'true':'false');
+  return !bad;
+}
+const emailRe=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const phoneRe=/^\+?[0-9\s\-\(\)]{7,20}$/;
+function pwScore(pw){
+  let s=0;
+  if(pw.length>=8)s++; if(pw.length>=12)s++;
+  if(/[A-Z]/.test(pw)&&/[a-z]/.test(pw))s++;
+  if(/[0-9]/.test(pw))s++; if(/[^A-Za-z0-9]/.test(pw))s++;
+  return Math.min(s,4);
+}
+function updatePwMeter(){
+  const pw=$('#userPw').value;
+  const fill=$('#pwStrengthFill'), txt=$('#pwStrengthText');
+  if(!pw){fill.style.width='0%';txt.textContent='Password strength: —';return 0;}
+  const sc=pwScore(pw);
+  const labels=['Very weak','Weak','Good','Strong','Excellent'];
+  const colors=['#B91C1C','#EA580C','#CA8A04','#15803D','#166534'];
+  fill.style.width=((sc+1)/5*100)+'%'; fill.style.background=colors[sc];
+  txt.textContent='Password strength: '+labels[sc];
+  return sc;
+}
+$('#userPw').addEventListener('input',updatePwMeter);
+$('#userMsg').addEventListener('input',e=>{$('#userMsgCount').textContent=e.target.value.length+' / 500';});
+$$('[data-pw-toggle]').forEach(b=>b.addEventListener('click',()=>{
+  const inp=document.getElementById(b.dataset.pwToggle);
+  const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  b.textContent=show?'Hide':'Show';
+  b.setAttribute('aria-pressed',String(show));
+  b.setAttribute('aria-label',(show?'Hide ':'Show ')+inp.previousElementSibling?.textContent||'password');
+}));
+function resetUserForm(){
+  userForm.reset(); $('#editUserId').value='';
+  $('#userModalTitle').textContent='Add new user';
+  $('#userSubmitBtn').textContent='Create user';
+  $('#userModalDesc').textContent='Fill in the details below. Fields marked * are required.';
+  $('#userPw').required=true; $('#userPw2').required=true;
+  ['fullName','userEmail','userPhone','userDept','userPw','userPw2','userTerms'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.setAttribute('aria-invalid','false');
+  });
+  $$('.error-msg', $('#userModal')).forEach(e=>e.hidden=true);
+  $('#userErrSummary').hidden=true; $('#userErrList').innerHTML='';
+  $('#pwStrengthFill').style.width='0%'; $('#pwStrengthText').textContent='Password strength: —';
+  $('#userMsgCount').textContent='0 / 500';
+}
+function validateUserForm(){
+  const errs=[];
+  const name=$('#fullName'), email=$('#userEmail'), phone=$('#userPhone'), dept=$('#userDept'),
+        pw=$('#userPw'), pw2=$('#userPw2'), terms=$('#userTerms');
+  const isEdit=!!$('#editUserId').value;
+  let ok=true;
+  if(!(name.value.trim().length>=3)){ ok=setErr(name,$('#fullNameErr'),true)&&ok; errs.push(['fullName','Full name (min. 3 characters)']); } else setErr(name,$('#fullNameErr'),false);
+  if(!emailRe.test(email.value.trim())){ ok=setErr(email,$('#userEmailErr'),true)&&ok; errs.push(['userEmail','Valid email address']); } else setErr(email,$('#userEmailErr'),false);
+  if(!phoneRe.test(phone.value.trim())){ ok=setErr(phone,$('#userPhoneErr'),true)&&ok; errs.push(['userPhone','Valid phone number']); } else setErr(phone,$('#userPhoneErr'),false);
+  if(!dept.value){ ok=setErr(dept,$('#userDeptErr'),true)&&ok; errs.push(['userDept','Department selection']); } else setErr(dept,$('#userDeptErr'),false);
+  const pwVal=pw.value;
+  const pwNeeded=!isEdit||pwVal.length>0;
+  if(pwNeeded){
+    const strong=pwVal.length>=8&&/[A-Z]/.test(pwVal)&&/[a-z]/.test(pwVal)&&/[0-9]/.test(pwVal)&&/[^A-Za-z0-9]/.test(pwVal);
+    if(!strong){ ok=setErr(pw,$('#userPwErr'),true)&&ok; errs.push(['userPw','Strong password']); } else setErr(pw,$('#userPwErr'),false);
+    if(pw2.value!==pwVal||!pw2.value){ ok=setErr(pw2,$('#userPw2Err'),true)&&ok; errs.push(['userPw2','Matching confirm password']); } else setErr(pw2,$('#userPw2Err'),false);
+  } else { setErr(pw,$('#userPwErr'),false); setErr(pw2,$('#userPw2Err'),false); }
+  if(!terms.checked){ $('#userTermsErr').hidden=false; terms.setAttribute('aria-invalid','true'); ok=false; errs.push(['userTerms','Terms acceptance']); }
+  else { $('#userTermsErr').hidden=true; terms.setAttribute('aria-invalid','false'); }
+  const sum=$('#userErrSummary'), list=$('#userErrList');
+  list.innerHTML='';
+  if(!ok){
+    $('#userErrSummary').hidden=false;
+    errs.forEach(([id,label])=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href='#'+id; a.textContent=label; a.addEventListener('click',e=>{e.preventDefault();document.getElementById(id)?.focus();}); li.appendChild(a); list.appendChild(li); });
+    sum.focus();
+    announce('Form has '+errs.length+' errors. Please review.');
+  } else { sum.hidden=true; }
+  return ok;
+}
+// live clearing
+['fullName','userEmail','userPhone','userDept','userPw','userPw2'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',e=>{
+    e.target.setAttribute('aria-invalid','false');
+    const map={fullName:'fullNameErr',userEmail:'userEmailErr',userPhone:'userPhoneErr',userDept:'userDeptErr',userPw:'userPwErr',userPw2:'userPw2Err'};
+    const err=document.getElementById(map[id]); if(err) err.hidden=true;
+  });
+});
+$('#userTerms').addEventListener('change',e=>{ $('#userTermsErr').hidden=e.target.checked; e.target.setAttribute('aria-invalid',String(!e.target.checked)); });
+userForm.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!validateUserForm()) return;
+  const editId=$('#editUserId').value;
+  if(editId){
+    const u=users.find(x=>x.id===Number(editId));
+    if(u){ u.name=$('#fullName').value.trim(); u.email=$('#userEmail').value.trim(); u.phone=$('#userPhone').value.trim(); u.dept=$('#userDept').value; }
+    renderTable(); closeModal(); toast('Saved','User updated successfully.','success');
+  } else {
+    const newId=Math.max(...users.map(u=>u.id))+1;
+    users.unshift({id:newId,name:$('#fullName').value.trim(),email:$('#userEmail').value.trim(),phone:$('#userPhone').value.trim(),dept:$('#userDept').value,status:'Invited',joined:new Date().toISOString().slice(0,10),img:Math.floor(Math.random()*70)+1});
+    state.page=1; state.search=''; $('#filterSearch').value=''; state.dept=''; $('#filterDept').value=''; state.status=''; $('#filterStatus').value='';
+    renderTable(); closeModal(); toast('User created',$('#fullName').value.trim()+' was invited.','success');
+    showPage('users');
+  }
+});
+$('#termsLink').addEventListener('click',e=>{ e.preventDefault(); closeModal(); setTimeout(()=>showPage('components'),220); });
+
+/* ---------- Charts ---------- */
+const perfData={
+  H1:[{m:'Jan',v:42,t:50},{m:'Feb',v:55,t:50},{m:'Mar',v:48,t:55},{m:'Apr',v:72,t:60},{m:'May',v:64,t:65},{m:'Jun',v:86,t:70}],
+  H2:[{m:'Jul',v:78,t:70},{m:'Aug',v:84,t:72},{m:'Sep',v:69,t:74},{m:'Oct',v:91,t:76},{m:'Nov',v:82,t:78},{m:'Dec',v:95,t:80}]
+};
+function renderPerf(period){
+  const wrap=$('#perfChart'); wrap.innerHTML='';
+  const data=perfData[period]; const max=Math.max(...data.map(d=>Math.max(d.v,d.t)));
+  data.forEach((d,i)=>{
+    const col=document.createElement('div'); col.className='bar-col';
+    const h=Math.round(d.v/max*100);
+    col.innerHTML='<span class="bar-val" aria-hidden="true">'+d.v+'</span><div class="bar'+(d.v>=d.t?' active':'')+'" style="height:0%" aria-hidden="true"></div><span class="bar-label" aria-hidden="true">'+d.m+'</span>';
+    col.title=d.m+': '+d.v+' completed (target '+d.t+')';
+    wrap.appendChild(col);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ col.querySelector('.bar').style.height=h+'%'; }));
+  });
+  const best=data.reduce((a,b)=>a.v>b.v?a:b);
+  wrap.setAttribute('aria-label','Bar chart, '+period+'. Highest month is '+best.m+' with '+best.v+' tasks completed.');
+  const tb=$('#perfTableBody'); tb.innerHTML='';
+  data.forEach(d=>{ const tr=document.createElement('tr'); tr.innerHTML='<th scope="row">'+d.m+'</th><td>'+d.v+'</td><td>'+d.t+'</td>'; tb.appendChild(tr); });
+}
+$$('[data-period]').forEach(b=>b.addEventListener('click',()=>{
+  $$('[data-period]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true'); renderPerf(b.dataset.period);
+}));
+const revData={
+  '2025':[{m:'Jan',v:96},{m:'Feb',v:104},{m:'Mar',v:112},{m:'Apr',v:98},{m:'May',v:121},{m:'Jun',v:130}],
+  '2026':[{m:'Mar',v:128},{m:'Apr',v:142},{m:'May',v:136},{m:'Jun',v:158},{m:'Jul',v:171},{m:'Aug',v:184}]
+};
+function renderRevenue(year){
+  const wrap=$('#revenueChart'); wrap.innerHTML='';
+  const data=revData[year]; const max=Math.max(...data.map(d=>d.v));
+  data.forEach(d=>{
+    const col=document.createElement('div'); col.className='bar-col';
+    const h=Math.round(d.v/max*100);
+    col.innerHTML='<span class="bar-val" aria-hidden="true">$'+d.v+'k</span><div class="bar active" style="height:0%" aria-hidden="true"></div><span class="bar-label" aria-hidden="true">'+d.m+'</span>';
+    col.title=d.m+' '+year+': $'+d.v+'k';
+    wrap.appendChild(col);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{col.querySelector('.bar').style.height=h+'%';}));
+  });
+  const peak=data.reduce((a,b)=>a.v>b.v?a:b);
+  wrap.setAttribute('aria-label','Revenue '+year+'. Peak in '+peak.m+' at '+peak.v+' thousand dollars.');
+  const tb=$('#revenueTbody'); tb.innerHTML='';
+  data.forEach((d,i)=>{
+    const prev=i>0?data[i-1].v:null;
+    const g=prev==null?'—':(((d.v-prev)/prev*100).toFixed(1)+'%');
+    const tr=document.createElement('tr'); tr.innerHTML='<th scope="row">'+d.m+' '+year+'</th><td>$'+d.v+'k</td><td>'+g+'</td>'; tb.appendChild(tr);
+  });
+}
+$$('[data-rev]').forEach(b=>b.addEventListener('click',()=>{
+  $$('[data-rev]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true'); renderRevenue(b.dataset.rev);
+}));
+
+/* ---------- Counters ---------- */
+function animateCounts(){
+  $$('[data-count]').forEach(el=>{
+    const target=Number(el.dataset.count), pre=el.dataset.prefix||'', suf=el.dataset.suffix||'';
+    if(prefersReduced){ el.textContent=pre+target.toLocaleString()+suf; return; }
+    const dur=1200, t0=performance.now();
+    function tick(t){
+      const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+      el.textContent=pre+Math.round(target*e).toLocaleString()+suf;
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+/* ---------- CSV / Print ---------- */
+function downloadCSV(rows, filename){
+  const head='ID,Name,Email,Department,Status,Joined\n';
+  const body=rows.map(u=>[u.id,'"'+u.name+'"','"'+u.email+'"','"'+u.dept+'"','"'+u.status+'"',u.joined].join(',')).join('\n');
+  const blob=new Blob([head+body],{type:'text/csv'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  toast('Exported', rows.length+' rows downloaded as '+filename+'.','success');
+}
+$('#downloadCsvReportBtn').addEventListener('click',()=>{
+  const rows=[{m:'Q1',rev:284,exp:192},{m:'Q2',rev:342,exp:211},{m:'Q3',rev:418,exp:238}];
+  const csv='Quarter,Revenue,Expenses\n'+rows.map(r=>r.m+','+r.rev+'k,'+r.exp+'k').join('\n');
+  const blob=new Blob([csv],{type:'text/csv'}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='quarterly-report.csv'; document.body.appendChild(a); a.click(); a.remove();
+  toast('Exported','Quarterly report downloaded.','success');
+});
+$('#downloadReportBtn').addEventListener('click',()=>downloadCSV(users,'dashboard-users.csv'));
+$('#printReportBtn').addEventListener('click',()=>window.print());
+
+/* ---------- Tabs (generic roving) ---------- */
+function initTabs(listId){
+  const list=document.getElementById(listId); if(!list) return;
+  const tabs=$$('[role="tab"]',list);
+  function select(tab, focus){
+    tabs.forEach(t=>{ const on=t===tab; t.setAttribute('aria-selected',String(on)); t.tabIndex=on?0:-1;
+      const p=document.getElementById(t.getAttribute('aria-controls')); if(p) p.hidden=!on; });
+    if(focus) tab.focus();
+  }
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>select(t,false));
+    t.addEventListener('keydown',e=>{
+      let idx=null;
+      if(e.key==='ArrowRight'||e.key==='ArrowDown') idx=(i+1)%tabs.length;
+      if(e.key==='ArrowLeft'||e.key==='ArrowUp') idx=(i-1+tabs.length)%tabs.length;
+      if(e.key==='Home') idx=0;
+      if(e.key==='End') idx=tabs.length-1;
+      if(idx!=null){e.preventDefault();select(tabs[idx],true);}
+    });
+  });
+}
+initTabs('settingsTablist'); initTabs('demoTablist'); initTabs('docsTablist');
+function selectDocsTab(key){
+  const map={readme:0,struct:1,run:2,a11y:3,kbd:4,valid:5};
+  const tabs=$$('#docsTablist [role="tab"]');
+  const t=tabs[map[key]??0]; if(t) t.click();
+}
+$('#shortcutsBtn').addEventListener('click',()=>{ openModal('docsModal',$('#shortcutsBtn')); selectDocsTab('kbd'); });
+$('#copyReadmeBtn').addEventListener('click',e=>{
+  const txt='Northwind Enterprise Dashboard — Accessible multi-page project (index/users/reports/settings/components). Semantic HTML5, WCAG 2.1 AA, vanilla JS.';
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(
+    ()=>toast('Copied','README summary copied to clipboard.','success'),
+    ()=>toast('Copy','Select and copy manually (clipboard blocked).','info'));
+});
+
+/* ---------- Accordion ---------- */
+$$('#demoAccordion .accordion-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const panel=document.getElementById(btn.getAttribute('aria-controls'));
+    const open=btn.getAttribute('aria-expanded')==='true';
+    // single-expand: close others
+    $$('#demoAccordion .accordion-btn').forEach(b=>{ b.setAttribute('aria-expanded','false'); document.getElementById(b.getAttribute('aria-controls')).hidden=true; });
+    btn.setAttribute('aria-expanded',String(!open)); panel.hidden=open;
+  });
+});
+
+/* ---------- Dismissible alerts ---------- */
+document.addEventListener('click',e=>{
+  const d=e.target.closest('[data-dismiss]'); if(d){ d.closest('.alert').remove(); announce('Notification dismissed.'); }
+});
+
+/* ---------- Settings forms ---------- */
+$('#profileForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const n=$('#setFullName'), em=$('#setEmail');
+  let ok=true;
+  if(n.value.trim().length<3){$('#setFullNameErr').hidden=false;n.setAttribute('aria-invalid','true');ok=false;}else{$('#setFullNameErr').hidden=true;n.setAttribute('aria-invalid','false');}
+  if(!emailRe.test(em.value.trim())){$('#setEmailErr').hidden=false;em.setAttribute('aria-invalid','true');ok=false;}else{$('#setEmailErr').hidden=true;em.setAttribute('aria-invalid','false');}
+  if(!ok){announce('Profile has errors.');return;}
+  toast('Profile saved','Your changes are live.','success');
+});
+$('#changeAvatarBtn').addEventListener('click',()=>{
+  const img=$('#profilePreview'); const n=Math.floor(Math.random()*70)+1;
+  img.src='https://i.pravatar.cc/120?img='+n; toast('Photo updated','Profile photo changed.','success');
+});
+$('#removeAvatarBtn').addEventListener('click',()=>{ $('#profilePreview').src='https://i.pravatar.cc/120?img=8'; toast('Photo removed','Reverted to default avatar.','info'); });
+['swEmail','swJoin','swSec','swMkt'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',e=>{
+    toast('Preference saved', e.target.closest('.switch-row').querySelector('h3').textContent+(e.target.checked?' enabled.':' disabled.'),'info');
+  });
+});
+$('#securityForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const cur=$('#curPw'),nw=$('#newPw'),nw2=$('#newPw2'); let ok=true;
+  if(cur.value.length<8){$('#curPwErr').hidden=false;ok=false;}else $('#curPwErr').hidden=true;
+  const strong=nw.value.length>=8&&/[A-Z]/.test(nw.value)&&/[a-z]/.test(nw.value)&&/[0-9]/.test(nw.value);
+  if(!strong){$('#newPwErr').hidden=false;ok=false;}else $('#newPwErr').hidden=true;
+  if(nw2.value!==nw.value||!nw2.value){$('#newPw2Err').hidden=false;ok=false;}else $('#newPw2Err').hidden=true;
+  if(!ok){announce('Security form has errors.');return;}
+  e.target.reset(); toast('Password updated','Use your new password next sign-in.','success');
+});
+$('#prefMotion').addEventListener('change',e=>{
+  document.documentElement.style.setProperty('scroll-behavior', e.target.checked?'auto':'smooth');
+  toast('Accessibility', e.target.checked?'Reduced motion on.':'Reduced motion off.','info');
+});
+$('#prefFontSize').addEventListener('change',e=>{ document.body.style.fontSize=e.target.value+'px'; announce('Text size '+e.target.value+' pixels.'); });
+
+/* ---------- Demo form ---------- */
+$('#demoForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const em=$('#demoEmail');
+  if(!emailRe.test(em.value.trim())){ $('#demoEmailErr').hidden=false; em.setAttribute('aria-invalid','true'); em.focus(); }
+  else{ $('#demoEmailErr').hidden=true; em.setAttribute('aria-invalid','false'); toast('Valid','Email looks good.','success'); }
+});
+$('#demoForm').addEventListener('reset',()=>{ $('#demoEmailErr').hidden=true; $('#demoEmail').setAttribute('aria-invalid','false'); });
+
+/* ---------- Back to top ---------- */
+$('#backToTop').addEventListener('click',e=>{ e.preventDefault(); $('#main-content').focus(); window.scrollTo({top:0,behavior:prefersReduced?'auto':'smooth'}); });
+
+/* ---------- Init ---------- */
+function init(){
+  const start=(location.hash||'#dashboard').replace('#','');
+  renderTable(); renderPerf('H1'); renderRevenue('2026'); animateCounts();
+  showPage(pageTitles[start]?start:'dashboard',{noFocus:true});
+  // ensure h1 focus only after user nav; keep initial scroll top
+  window.scrollTo(0,0);
+}
+init();
+})();
+</script>
+</body>
+</html>
